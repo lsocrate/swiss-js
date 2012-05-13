@@ -1,0 +1,17 @@
+/* the humans responsible & colophon */
+/* humanstxt.org */
+
+
+/* TEAM */
+  Developer & Designer: Luiz Sócrate
+  Site: socrate.com.br
+  Twitter: @lsocrate
+  Location: São Paulo, Brazil
+
+/* THANKS */
+  Names (& URL):
+
+/* SITE */
+  Standards: HTML5, CSS3
+  Components: Modernizr, jQuery
+  Software: 
