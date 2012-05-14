@@ -46,25 +46,22 @@ test("Add match to round", function () {
   var tournament = getTestTournament();
 
   tournament.addRound();
-  tournament.addMatchOnRound('Anna', 'Bob', 1);
+  tournament.round(1).addMatch('Anna', 'Bob');
 
   ok(tournament.round(1)['anna@bob']);
 
-  var result = tournament.addMatchOnRound('Anna', 'Johnny', 1);
+  var result = tournament.round(1).addMatch('Anna', 'Johnny');
   ok(result.error);
-
-  var result2 = tournament.addMatchOnRound('Anna', 'Henry', 2);
-  ok(result2.error);
 });
 
 test("Get match", function () {
   var tournament = getTestTournament();
 
   tournament.addRound();
-  tournament.addMatchOnRound('Anna', 'Bob', 1);
-  tournament.addMatchOnRound('Claude', 'Dennis', 1);
-  tournament.addMatchOnRound('Eliot', 'Francis', 1);
-  tournament.addMatchOnRound('George', 'Henry', 1);
+  tournament.round(1).addMatch('Anna', 'Bob');
+  tournament.round(1).addMatch('Claude', 'Dennis');
+  tournament.round(1).addMatch('Eliot', 'Francis');
+  tournament.round(1).addMatch('George', 'Henry');
 
   var match = tournament.getMatch('Claude', 'Dennis');
   deepEqual(match, {players : ['Claude', 'Dennis'], winner  : null, isDone  : false });
