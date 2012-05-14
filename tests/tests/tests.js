@@ -9,6 +9,17 @@ function getTestTournament() {
     .addPlayer('George', 'Scorpion')
     .addPlayer('Henry', 'Spider');
 }
+function getTestRound1() {
+  var tournament = getTestTournament();
+
+  tournament.addRound();
+  tournament.round(1).addMatch('Anna', 'Bob');
+  tournament.round(1).addMatch('Claude', 'Dennis');
+  tournament.round(1).addMatch('Eliot', 'Francis');
+  tournament.round(1).addMatch('George', 'Henry');
+
+  return tournament;
+}
 
 test("Add player", function () {
   var tournament = new SwissTournament();
@@ -55,13 +66,7 @@ test("Add match to round", function () {
 });
 
 test("Get match", function () {
-  var tournament = getTestTournament();
-
-  tournament.addRound();
-  tournament.round(1).addMatch('Anna', 'Bob');
-  tournament.round(1).addMatch('Claude', 'Dennis');
-  tournament.round(1).addMatch('Eliot', 'Francis');
-  tournament.round(1).addMatch('George', 'Henry');
+  var tournament = getTestRound1();
 
   var match = tournament.getMatch('Claude', 'Dennis');
   deepEqual(match.players, ['Claude', 'Dennis']);
@@ -71,13 +76,7 @@ test("Get match", function () {
 });
 
 test("Report match result", function () {
-  var tournament = getTestTournament();
-
-  tournament.addRound();
-  tournament.round(1).addMatch('Anna', 'Bob');
-  tournament.round(1).addMatch('Claude', 'Dennis');
-  tournament.round(1).addMatch('Eliot', 'Francis');
-  tournament.round(1).addMatch('George', 'Henry');
+  var tournament = getTestRound1();
 
   var match = tournament.getMatch('Claude', 'Dennis');
   match.reportWinner('Dennis');
@@ -88,4 +87,16 @@ test("Report match result", function () {
   match2.reportDraw();
   equal(match2.winner, undefined);
   equal(match2.isDone, true);
+});
+
+test("Rank players", function () {
+  var tournament = getTestRound1();
+
+  tournament.getMatch('Anna', 'Bob').reportWinner('Anna');
+  tournament.getMatch('Claude', 'Dennis').reportWinner('Claude');
+  tournament.getMatch('Eliot', 'Francis').reportWinner('Eliot');
+  tournament.getMatch('George', 'Henry').reportWinner('George');
+
+  console.log('ranking', tournament.players);
+  ok(true);
 });
