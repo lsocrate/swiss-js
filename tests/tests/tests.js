@@ -34,3 +34,14 @@ test("Schedule matchs", function () {
 
   equal(tournament.matches.length, 4);
 });
+
+test("Get match", function () {
+  var tournament = getTestTournament();
+
+  tournament.addMatch('Anna', 'Bob');
+  tournament.addMatch('Claude', 'Dennis');
+  tournament.addMatch('Eliot', 'Francis');
+  tournament.addMatch('George', 'Henry');
+
+  deepEqual(tournament.getMatch('Francis'), ['Eliot', 'Francis']);
+});
