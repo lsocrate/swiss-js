@@ -1,6 +1,5 @@
 var SwissTournament = function () {
   this.players = [];
-  this.matches = [];
 };
 
 SwissTournament.prototype.addPlayer = function (name, clan) {
