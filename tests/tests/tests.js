@@ -16,3 +16,10 @@ test("Add player", function () {
   tournament.addPlayer('Anna', 'Scorpion');
   equal(tournament.players.length, 1);
 });
+
+test("Get player", function () {
+  var tournament = getTestTournament();
+  var player = tournament.getPlayer('Anna');
+
+  deepEqual(player, {name:'Anna', clan:'Crab', points:0});
+});
