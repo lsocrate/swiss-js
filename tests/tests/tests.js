@@ -32,7 +32,7 @@ test("New round", function () {
   equal(tournament.rounds.length, 1);
 });
 
-test("get round", function () {
+test("Get round", function () {
   var tournament = getTestTournament();
 
   tournament.addRound();
@@ -53,4 +53,17 @@ test("Add match to round", function () {
 
   var result2 = tournament.addMatchOnRound('Anna', 'Henry', 2);
   ok(result2.error);
+});
+
+test("Get match", function () {
+  var tournament = getTestTournament();
+
+  tournament.addRound();
+  tournament.addMatchOnRound('Anna', 'Bob', 1);
+  tournament.addMatchOnRound('Claude', 'Dennis', 1);
+  tournament.addMatchOnRound('Eliot', 'Francis', 1);
+  tournament.addMatchOnRound('George', 'Henry', 1);
+
+  var match = tournament.getMatch('Claude', 'Dennis');
+  deepEqual(match, {players : ['Claude', 'Dennis'], winner  : null, isDone  : false });
 });

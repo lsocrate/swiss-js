@@ -39,9 +39,30 @@ SwissTournament.prototype.addMatchOnRound = function (player1Name, player2Name, 
     var matchName = player1.name + "@" + player2.name;
     matchName = matchName.toLowerCase();
 
-    this.round(roundNumber)[matchName] = {players:[player1.name, player2.name]};
+    this.round(roundNumber)[matchName] = {
+      players : [player1.name, player2.name],
+      winner  : null,
+      isDone  : false
+    };
     return {error:false};
   } else {
     return {error:true};
+  }
+};
+
+SwissTournament.prototype.getMatch = function (player1Name, player2Name) {
+  var player1 = this.getPlayer(player1Name);
+  var player2 = this.getPlayer(player2Name);
+
+  if (player1 && player2) {
+    var matchName = player1.name + "@" + player2.name;
+    matchName = matchName.toLowerCase();
+    for (var i = 0; i < this.rounds.length; i++) {
+      var round = this.rounds[i];
+
+      if (round[matchName]) {
+        return round[matchName];
+      }
+    };
   }
 };
