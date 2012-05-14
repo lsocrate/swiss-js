@@ -13,10 +13,10 @@ function getTestRound1() {
   var tournament = getTestTournament();
 
   tournament.addRound();
-  tournament.round(1).addMatch('Anna', 'Bob');
-  tournament.round(1).addMatch('Claude', 'Dennis');
-  tournament.round(1).addMatch('Eliot', 'Francis');
-  tournament.round(1).addMatch('George', 'Henry');
+  tournament.getRound(1).addMatch('Anna', 'Bob');
+  tournament.getRound(1).addMatch('Claude', 'Dennis');
+  tournament.getRound(1).addMatch('Eliot', 'Francis');
+  tournament.getRound(1).addMatch('George', 'Henry');
 
   return tournament;
 }
@@ -50,18 +50,18 @@ test("Get round", function () {
 
   tournament.addRound();
 
-  ok(tournament.round(1));
+  ok(tournament.getRound(1));
 });
 
 test("Add match to round", function () {
   var tournament = getTestTournament();
 
   tournament.addRound();
-  tournament.round(1).addMatch('Anna', 'Bob');
+  tournament.getRound(1).addMatch('Anna', 'Bob');
 
-  ok(tournament.round(1)['anna@bob']);
+  ok(tournament.getRound(1)['anna@bob']);
 
-  var result = tournament.round(1).addMatch('Anna', 'Johnny');
+  var result = tournament.getRound(1).addMatch('Anna', 'Johnny');
   ok(result.error);
 });
 
@@ -107,4 +107,11 @@ test("Rank players", function () {
   var isBobBottomHalf = (bobPosition > 4);
 
   ok(isBobBottomHalf);
+});
+
+test("Generate round", function () {
+  var tournament = getTestTournament();
+  tournament.generateRound();
+  ok(tournament.getRound(1));
+  console.log(tournament);
 });

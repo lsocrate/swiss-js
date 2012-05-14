@@ -95,8 +95,8 @@ var SwissTournament = function () {
     this.rounds.push(new Round());
   };
 
-  this.round = function (roundNumber) {
-    return this.rounds[roundNumber - 1];
+  this.getRound = function (roundNumber) {
+    return (typeof roundNumber === 'number') ? this.rounds[roundNumber - 1] : this.rounds[this.rounds.length - 1];
   };
 
   this.getMatch = function (player1Name, player2Name) {
@@ -121,4 +121,39 @@ var SwissTournament = function () {
       return b.points - a.points;
     });
   };
+
+  var getPlayersByPointsGroup = function () {
+    var groups = [];
+    for (var i = 0; i < tournament.players.length; i++) {
+      var player = tournament.players[i];
+      if (typeof groups[player.points] === 'undefined') {
+        groups[player.points] = [player];
+      } else {
+        groups[player.points].push(player);
+      }
+    };
+
+    return groups;
+  };
+
+  this.generateRound = function () {
+    this.updateRanking();
+    this.addRound();
+
+    var groupsToMatch = getPlayersByPointsGroup();
+    var oddPlayer;
+    for (var i = groupsToMatch.length - 1; i >= 0; i--) {
+      var group = groupsToMatch[i];
+
+      while(group.length >= 2) {
+        var player1 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
+        var player2 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
+
+        this.getRound(1).addMatch(player1.name, player2.name);
+      }
+      if (group.length) {
+        oddPlayer.push(group[0]);
+      }
+    };
+  }
 };
