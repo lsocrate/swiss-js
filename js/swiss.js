@@ -1,5 +1,10 @@
+var Round = function () {
+  this.matches = {};
+};
+
 var SwissTournament = function () {
   this.players = [];
+  this.rounds = [];
 };
 
 SwissTournament.prototype.addPlayer = function (name, clan) {
@@ -16,4 +21,8 @@ SwissTournament.prototype.getPlayer = function (name) {
       return player;
     }
   };
+};
+
+SwissTournament.prototype.addRound = function() {
+  this.rounds.push(new Round());
 };

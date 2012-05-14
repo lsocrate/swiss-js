@@ -23,3 +23,11 @@ test("Get player", function () {
 
   deepEqual(player, {name:'Anna', clan:'Crab', points:0});
 });
+
+test("New round", function () {
+  var tournament = getTestTournament();
+
+  tournament.addRound();
+
+  equal(tournament.rounds.length, 1);
+});
