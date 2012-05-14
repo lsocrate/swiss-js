@@ -4,7 +4,11 @@ var SwissTournament = function () {
 };
 
 SwissTournament.prototype.addPlayer = function (name, clan) {
-  this.players.push({name:name, clan:clan, points:0});
+  this.players.push({
+    name   : name,
+    clan   : clan.toLowerCase(),
+    points : 0
+  });
 
   return this;
 };
