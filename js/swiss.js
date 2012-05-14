@@ -7,12 +7,18 @@ var SwissTournament = function () {
     return players.join('@').toLowerCase();
   };
 
+  var Player = function (name, clan) {
+    this.name   = name;
+    this.clan   = clan.toLowerCase();
+    this.points = 0;
+  };
+
+  var Round = function () {
+
+  };
+
   this.addPlayer = function (name, clan) {
-      this.players.push({
-      name   : name,
-      clan   : clan.toLowerCase(),
-      points : 0
-    });
+    this.players.push(new Player(name, clan));
 
     return this;
   };
@@ -26,7 +32,7 @@ var SwissTournament = function () {
   };
 
   this.addRound = function () {
-    this.rounds.push({});
+    this.rounds.push(new Round());
   };
 
   this.round = function (roundNumber) {

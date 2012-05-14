@@ -21,7 +21,9 @@ test("Get player", function () {
   var tournament = getTestTournament();
   var player = tournament.getPlayer('Anna');
 
-  deepEqual(player, {name:'Anna', clan:'crab', points:0});
+  equal(player.name, 'Anna');
+  equal(player.clan, 'crab');
+  equal(player.points, 0);
 });
 
 test("New round", function () {
@@ -37,7 +39,7 @@ test("Get round", function () {
 
   tournament.addRound();
 
-  deepEqual(tournament.round(1), {});
+  ok(tournament.round(1));
 });
 
 test("Add match to round", function () {
