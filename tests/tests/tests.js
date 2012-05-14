@@ -97,6 +97,14 @@ test("Rank players", function () {
   tournament.getMatch('Eliot', 'Francis').reportWinner('Eliot');
   tournament.getMatch('George', 'Henry').reportWinner('George');
 
-  console.log('ranking', tournament.players);
-  ok(true);
+  tournament.updateRanking();
+  var annaPosition = tournament.getPlayer('Anna').getPosition();
+  var isAnnaTopHalf = ((annaPosition > 0) && (annaPosition < 5));
+
+  ok(isAnnaTopHalf);
+
+  var bobPosition = tournament.getPlayer('Bob').getPosition();
+  var isBobBottomHalf = (bobPosition > 4);
+
+  ok(isBobBottomHalf);
 });

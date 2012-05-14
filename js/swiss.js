@@ -3,6 +3,7 @@ var SwissTournament = function () {
   this.rounds = [];
 
   var tournament = this;
+  var currentPlayerId = 0;
 
   var makeMatchName = function () {
     var players = [];
@@ -13,10 +14,23 @@ var SwissTournament = function () {
     return players.sort().join('@').toLowerCase();
   };
 
+  var generatePlayerId = function () {
+    return currentPlayerId++;
+  };
+
   var Player = function (name, clan) {
     this.name   = name;
     this.clan   = clan.toLowerCase();
     this.points = 0;
+    this.id     = generatePlayerId();
+  };
+  Player.prototype.getPosition = function () {
+    for (var i = 0; i < tournament.players.length; i++) {
+      var player = tournament.players[i];
+      if (player.id === this.id) {
+        return ++i;
+      }
+    };
   };
 
   var Match = function () {
@@ -36,7 +50,10 @@ var SwissTournament = function () {
   Match.prototype.reportWinner = function(winnerName) {
     this.winner = winnerName;
     this.isDone = true;
+
+    tournament.getPlayer(winnerName).points++;
   };
+
   Match.prototype.reportDraw = function() {
     this.winner = undefined;
     this.isDone = true;
@@ -97,5 +114,11 @@ var SwissTournament = function () {
         }
       };
     }
+  };
+
+  this.updateRanking = function () {
+    this.players.sort(function (a, b) {
+      return b.points - a.points;
+    });
   };
 };
