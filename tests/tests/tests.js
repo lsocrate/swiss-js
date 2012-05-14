@@ -64,5 +64,8 @@ test("Get match", function () {
   tournament.round(1).addMatch('George', 'Henry');
 
   var match = tournament.getMatch('Claude', 'Dennis');
-  deepEqual(match, {players : ['Claude', 'Dennis'], winner  : null, isDone  : false });
+  deepEqual(match.players, ['Claude', 'Dennis']);
+  equal(match.name, 'claude@dennis');
+  equal(match.winner, undefined);
+  equal(match.isDone, false);
 });
