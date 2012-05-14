@@ -33,6 +33,14 @@ var SwissTournament = function () {
       };
     }
   };
+  Match.prototype.reportWinner = function(winnerName) {
+    this.winner = winnerName;
+    this.isDone = true;
+  };
+  Match.prototype.reportDraw = function() {
+    this.winner = undefined;
+    this.isDone = true;
+  };
 
   var Round = function () {
 

@@ -69,3 +69,23 @@ test("Get match", function () {
   equal(match.winner, undefined);
   equal(match.isDone, false);
 });
+
+test("Report match result", function () {
+  var tournament = getTestTournament();
+
+  tournament.addRound();
+  tournament.round(1).addMatch('Anna', 'Bob');
+  tournament.round(1).addMatch('Claude', 'Dennis');
+  tournament.round(1).addMatch('Eliot', 'Francis');
+  tournament.round(1).addMatch('George', 'Henry');
+
+  var match = tournament.getMatch('Claude', 'Dennis');
+  match.reportWinner('Dennis');
+  equal(match.winner, 'Dennis');
+  equal(match.isDone, true);
+
+  var match2 = tournament.getMatch('Eliot', 'Francis');
+  match2.reportDraw();
+  equal(match2.winner, undefined);
+  equal(match2.isDone, true);
+});
