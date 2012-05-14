@@ -27,13 +27,3 @@ SwissTournament.prototype.addMatch = function(player1Name, player2Name) {
     this.matches.push([player1.name, player2.name]);
   }
 };
-
-SwissTournament.prototype.getMatch = function (playerName) {
-  for (var i = 0; i < this.matches.length; i++) {
-    var match = this.matches[i];
-
-    if (match.indexOf(playerName) > -1) {
-      return match;
-    }
-  };
-};
