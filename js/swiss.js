@@ -31,13 +31,17 @@ SwissTournament.prototype.round = function (roundNumber) {
   return this.rounds[roundNumber - 1];
 };
 
+
+SwissTournament.prototype.makeMatchName = function (player1, player2) {
+  return (player1.name + "@" + player2.name).toLowerCase();
+};
+
 SwissTournament.prototype.addMatchOnRound = function (player1Name, player2Name, roundNumber) {
   var player1 = this.getPlayer(player1Name);
   var player2 = this.getPlayer(player2Name);
 
   if (this.rounds[roundNumber - 1] && player1 && player2) {
-    var matchName = player1.name + "@" + player2.name;
-    matchName = matchName.toLowerCase();
+    var matchName = this.makeMatchName(player1, player2);
 
     this.round(roundNumber)[matchName] = {
       players : [player1.name, player2.name],
@@ -55,8 +59,8 @@ SwissTournament.prototype.getMatch = function (player1Name, player2Name) {
   var player2 = this.getPlayer(player2Name);
 
   if (player1 && player2) {
-    var matchName = player1.name + "@" + player2.name;
-    matchName = matchName.toLowerCase();
+    var matchName = this.makeMatchName(player1, player2);
+
     for (var i = 0; i < this.rounds.length; i++) {
       var round = this.rounds[i];
 
