@@ -47,4 +47,10 @@ test("Add match to round", function () {
   tournament.addMatchOnRound('Anna', 'Bob', 1);
 
   ok(tournament.round(1)['anna@bob']);
+
+  var result = tournament.addMatchOnRound('Anna', 'Johnny', 1);
+  ok(result.error);
+
+  var result2 = tournament.addMatchOnRound('Anna', 'Henry', 2);
+  ok(result2.error);
 });

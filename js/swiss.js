@@ -31,10 +31,13 @@ SwissTournament.prototype.addMatchOnRound = function (player1Name, player2Name, 
   var player1 = this.getPlayer(player1Name);
   var player2 = this.getPlayer(player2Name);
 
-  if (player1 && player2 && this.rounds[roundNumber - 1]) {
+  if (this.rounds[roundNumber - 1] && player1 && player2) {
     var matchName = player1.name + "@" + player2.name;
     matchName = matchName.toLowerCase();
 
     this.round(roundNumber)[matchName] = {players:[player1.name, player2.name]};
+    return {error:false};
+  } else {
+    return {error:true};
   }
 };
