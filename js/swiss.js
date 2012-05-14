@@ -31,7 +31,6 @@ SwissTournament.prototype.round = function (roundNumber) {
   return this.rounds[roundNumber - 1];
 };
 
-
 SwissTournament.prototype.makeMatchName = function (player1, player2) {
   return (player1.name + "@" + player2.name).toLowerCase();
 };
