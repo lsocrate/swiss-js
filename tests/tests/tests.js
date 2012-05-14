@@ -23,14 +23,3 @@ test("Get player", function () {
 
   deepEqual(player, {name:'Anna', clan:'Crab', points:0});
 });
-
-test("Schedule matchs", function () {
-  var tournament = getTestTournament();
-
-  tournament.addMatch('Anna', 'Bob');
-  tournament.addMatch('Claude', 'Dennis');
-  tournament.addMatch('Eliot', 'Francis');
-  tournament.addMatch('George', 'Henry');
-
-  equal(tournament.matches.length, 4);
-});
