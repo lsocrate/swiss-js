@@ -32,7 +32,8 @@ SwissTournament.prototype.round = function (roundNumber) {
 };
 
 SwissTournament.prototype.makeMatchName = function (player1, player2) {
-  return (player1.name + "@" + player2.name).toLowerCase();
+  var players = [player1.name, player2.name].sort();
+  return players.join('@').toLowerCase();
 };
 
 SwissTournament.prototype.addMatchOnRound = function (player1Name, player2Name, roundNumber) {
