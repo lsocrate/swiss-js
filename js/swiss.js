@@ -40,7 +40,7 @@ SwissTournament.prototype.addMatchOnRound = function (player1Name, player2Name, 
   var player1 = this.getPlayer(player1Name);
   var player2 = this.getPlayer(player2Name);
 
-  if (this.rounds[roundNumber - 1] && player1 && player2) {
+  if (this.round(roundNumber) && player1 && player2) {
     var matchName = this.makeMatchName(player1, player2);
 
     this.round(roundNumber)[matchName] = {
