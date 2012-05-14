@@ -21,6 +21,7 @@ function getTestRound1() {
   return tournament;
 }
 
+module('Player');
 test("Add player", function () {
   var tournament = new SwissTournament();
 
@@ -37,6 +38,7 @@ test("Get player", function () {
   equal(player.points, 0);
 });
 
+module('Round');
 test("New round", function () {
   var tournament = getTestTournament();
 
@@ -65,6 +67,14 @@ test("Add match to round", function () {
   ok(result.error);
 });
 
+test("Generate round", function () {
+  var tournament = getTestTournament();
+  tournament.generateRound();
+  ok(tournament.getRound(1));
+  console.log(tournament);
+});
+
+module('Matches');
 test("Get match", function () {
   var tournament = getTestRound1();
 
@@ -89,6 +99,7 @@ test("Report match result", function () {
   equal(match2.isDone, true);
 });
 
+module('Ranking');
 test("Rank players", function () {
   var tournament = getTestRound1();
 
@@ -107,11 +118,4 @@ test("Rank players", function () {
   var isBobBottomHalf = (bobPosition > 4);
 
   ok(isBobBottomHalf);
-});
-
-test("Generate round", function () {
-  var tournament = getTestTournament();
-  tournament.generateRound();
-  ok(tournament.getRound(1));
-  console.log(tournament);
 });
