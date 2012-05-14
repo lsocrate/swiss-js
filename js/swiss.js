@@ -1,5 +1,6 @@
 var SwissTournament = function () {
   this.players = [];
+  this.matches = [];
 };
 
 SwissTournament.prototype.addPlayer = function (name, clan) {
@@ -16,4 +17,13 @@ SwissTournament.prototype.getPlayer = function (name) {
       return player;
     }
   };
+};
+
+SwissTournament.prototype.addMatch = function(player1Name, player2Name) {
+  var player1 = this.getPlayer(player1Name);
+  var player2 = this.getPlayer(player2Name);
+
+  if (player1 && player2) {
+    this.matches.push([player1.name, player2.name]);
+  }
 };
