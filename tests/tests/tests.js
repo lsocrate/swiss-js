@@ -9,6 +9,7 @@ function getTestTournament() {
     .addPlayer('George', 'Scorpion')
     .addPlayer('Henry', 'Spider');
 }
+
 function getTestRound1() {
   var tournament = getTestTournament();
 
@@ -17,6 +18,20 @@ function getTestRound1() {
   tournament.getRound(1).addMatch('Claude', 'Dennis');
   tournament.getRound(1).addMatch('Eliot', 'Francis');
   tournament.getRound(1).addMatch('George', 'Henry');
+
+  return tournament;
+}
+function decideWinner(players){
+  return players.sort()[1];
+}
+
+function autoPlayRound(tournament) {
+  var roundMatches = tournament.getRound();
+  for(var match in roundMatches) {
+    if(roundMatches.hasOwnProperty(match)) {
+      roundMatches[match].reportWinner(decideWinner(roundMatches[match].players));
+    }
+  }
 
   return tournament;
 }
@@ -67,10 +82,28 @@ test("Add match to round", function () {
   ok(result.error);
 });
 
-test("Generate round", function () {
+test("Generate first round", function () {
   var tournament = getTestTournament();
   tournament.generateRound();
   ok(tournament.getRound(1));
+});
+
+test("Generate other rounds", function () {
+  var tournament = getTestTournament();
+
+  tournament.generateRound();
+  autoPlayRound(tournament);
+
+  tournament.generateRound();
+  autoPlayRound(tournament);
+
+  tournament.generateRound();
+  autoPlayRound(tournament);
+
+  tournament.updateRanking();
+  console.log(tournament);
+
+  ok((Object.keys(tournament.getRound(3)).length > 0));
 });
 
 module('Matches');

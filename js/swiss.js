@@ -147,10 +147,10 @@ var SwissTournament = function () {
         var player1 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
         var player2 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
 
-        this.getRound(1).addMatch(player1.name, player2.name);
+        this.getRound().addMatch(player1.name, player2.name);
       }
       if (group.length) {
-        oddPlayer.push(group[0]);
+        oddPlayer = group[0];
       }
     };
   }
