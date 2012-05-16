@@ -71,7 +71,6 @@ test("Generate round", function () {
   var tournament = getTestTournament();
   tournament.generateRound();
   ok(tournament.getRound(1));
-  console.log(tournament);
 });
 
 module('Matches');

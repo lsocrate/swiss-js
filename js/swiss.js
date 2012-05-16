@@ -6,10 +6,9 @@ var SwissTournament = function () {
   var currentPlayerId = 0;
 
   var makeMatchName = function () {
-    var players = [];
-    for (var i = 0; i < arguments.length; i++) {
-      players.push(arguments[i].name);
-    };
+    var players = [].slice.apply(arguments).map(function (player) {
+      return player.name;
+    });
 
     return players.sort().join('@').toLowerCase();
   };
@@ -39,12 +38,11 @@ var SwissTournament = function () {
     this.winner  = undefined;
     this.isDone  = false;
 
-    if (arguments) {
+    if (arguments.length) {
       this.name = makeMatchName.apply(null, arguments);
-
-      for (var i = 0; i < arguments.length; i++) {
-        this.players.push(arguments[i].name);
-      };
+      this.players = [].slice.apply(arguments).map(function (player) {
+        return player.name;
+      });
     }
   };
   Match.prototype.reportWinner = function(winnerName) {
