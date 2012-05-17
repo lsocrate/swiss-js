@@ -51,6 +51,14 @@ var SwissTournament = function () {
 
     return opponents;
   };
+  Player.prototype.calculateMs = function () {
+    var opponents = this.getOpponents();
+
+    for (var i = 0; i < opponents.length; i++) {
+      var opponentName = opponents[i];
+      this.ms += tournament.getPlayer(opponentName).points;
+    };
+  };
 
   var Match = function () {
     this.name = undefined;
@@ -139,6 +147,15 @@ var SwissTournament = function () {
       return b.points - a.points;
     });
   };
+  this.updateFinalRanking = function() {
+    this.players.sort(function (a, b) {
+      if (b.points != a.points) {
+        return b.points - a.points;
+      } else {
+        return b.ms - a.ms;
+      }
+    });
+  };
 
   var getPlayersByPointsGroup = function () {
     var groups = [];
@@ -174,4 +191,17 @@ var SwissTournament = function () {
       }
     };
   }
+
+  this.end = function () {
+    this.updateRanking();
+
+    for (var i = 0; i < this.players.length; i++) {
+      var player = this.players[i];
+      player.calculateMs();
+    };
+
+    this.updateFinalRanking();
+
+    return this;
+  };
 };

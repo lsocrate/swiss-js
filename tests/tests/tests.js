@@ -221,3 +221,17 @@ test("Rank players", function () {
 
   ok(isBobBottomHalf);
 });
+
+test("Rank players with ms", function () {
+  var tournament = getCompleteTournament();
+  tournament.end();
+
+  equal(tournament.getPlayer('Henry').getPosition(), 1);
+  equal(tournament.getPlayer('Dennis').getPosition(), 2);
+  equal(tournament.getPlayer('George').getPosition(), 3);
+  equal(tournament.getPlayer('Claude').getPosition(), 4);
+  equal(tournament.getPlayer('Francis').getPosition(), 5);
+  equal(tournament.getPlayer('Bob').getPosition(), 6);
+  equal(tournament.getPlayer('Eliot').getPosition(), 7);
+  equal(tournament.getPlayer('Anna').getPosition(), 8);
+});
