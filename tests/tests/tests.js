@@ -36,6 +36,71 @@ function autoPlayRound(tournament) {
   return tournament;
 }
 
+function getCompleteTournament(){
+  var tournament = getTestTournament();
+
+  tournament.updateRanking();
+  tournament.addRound();
+  tournament.getRound().addMatch('Anna', 'Bob');
+  tournament.getMatch('Anna', 'Bob').reportWinner('Bob');
+  tournament.getRound().addMatch('Claude', 'Dennis');
+  tournament.getMatch('Claude', 'Dennis').reportWinner('Dennis');
+  tournament.getRound().addMatch('Eliot', 'Francis');
+  tournament.getMatch('Eliot', 'Francis').reportWinner('Francis');
+  tournament.getRound().addMatch('George', 'Henry');
+  tournament.getMatch('George', 'Henry').reportWinner('Henry');
+  // Bob     => 1-0
+  // Dennis  => 1-0
+  // Francis => 1-0
+  // Henry   => 1-0
+  // Anna    => 0-0
+  // Claude  => 0-0
+  // Eliot   => 0-0
+  // George  => 0-0
+
+  tournament.updateRanking();
+  tournament.addRound();
+  tournament.getRound().addMatch('Bob', 'Dennis');
+  tournament.getMatch('Bob', 'Dennis').reportWinner('Dennis');
+  tournament.getRound().addMatch('Francis', 'Henry');
+  tournament.getMatch('Francis', 'Henry').reportWinner('Henry');
+  tournament.getRound().addMatch('Claude', 'Anna');
+  tournament.getMatch('Claude', 'Anna').reportWinner('Claude');
+  tournament.getRound().addMatch('George', 'Eliot');
+  tournament.getMatch('George', 'Eliot').reportWinner('George');
+  // Dennis  => 2-0
+  // Henry   => 2-0
+  // Bob     => 1-0
+  // Francis => 1-0
+  // Claude  => 1-0
+  // George  => 1-0
+  // Anna    => 0-0
+  // Eliot   => 0-0
+
+  tournament.updateRanking();
+  tournament.addRound();
+  tournament.getRound().addMatch('Henry', 'Dennis');
+  tournament.getMatch('Henry', 'Dennis').reportWinner('Henry');
+  tournament.getRound().addMatch('Bob', 'Claude');
+  tournament.getMatch('Bob', 'Claude').reportWinner('Claude');
+  tournament.getRound().addMatch('Francis', 'George');
+  tournament.getMatch('Francis', 'George').reportWinner('George');
+  tournament.getRound().addMatch('Anna', 'Eliot');
+  tournament.getMatch('Anna', 'Eliot').reportWinner('Eliot');
+  // Henry   => 3-0 = [points 3][ms 2x1x2 = 5]
+  // Dennis  => 2-0 = [points 2][ms 2x1x3 = 6]
+  // George  => 2-0 = [points 2][ms 3x1x1 = 5]
+  // Claude  => 2-0 = [points 2][ms 2x0x1 = 3]
+  // Francis => 1-0 = [points 1][ms 1x3x2 = 6]
+  // Bob     => 1-0 = [points 1][ms 0x2x2 = 4]
+  // Eliot   => 1-0 = [points 1][ms 1x2x0 = 3]
+  // Anna    => 0-0 = [points 0][ms 1x2x1 = 4]
+
+  tournament.updateRanking();
+
+  return tournament;
+}
+
 module('Player');
 test("Add player", function () {
   var tournament = new SwissTournament();
@@ -51,6 +116,14 @@ test("Get player", function () {
   equal(player.name, 'Anna');
   equal(player.clan, 'crab');
   equal(player.points, 0);
+});
+test("Get player opponents", function () {
+  var tournament = getCompleteTournament();
+  tournament.end();
+
+  var opponents = tournament.getPlayer('Anna').getOpponents();
+
+  deepEqual(opponents, ['Bob', 'Claude', 'Eliot'])
 });
 
 module('Round');
@@ -101,7 +174,6 @@ test("Generate other rounds", function () {
   autoPlayRound(tournament);
 
   tournament.updateRanking();
-  console.log(tournament);
 
   ok((Object.keys(tournament.getRound(3)).length > 0));
 });

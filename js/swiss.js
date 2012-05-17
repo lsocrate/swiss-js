@@ -21,6 +21,7 @@ var SwissTournament = function () {
     this.name   = name;
     this.clan   = clan.toLowerCase();
     this.points = 0;
+    this.ms     = 0;
     this.id     = generatePlayerId();
   };
   Player.prototype.getPosition = function () {
@@ -30,6 +31,25 @@ var SwissTournament = function () {
         return ++i;
       }
     };
+  };
+  Player.prototype.getOpponents = function () {
+    var opponents = [];
+
+    for (var i = 0; i < tournament.rounds.length; i++) {
+      var round = tournament.rounds[i];
+
+      for (var matchName in round) {
+        if (round.hasOwnProperty(matchName)){
+          if (round[matchName].players.indexOf(this.name) === 0) {
+            opponents.push(round[matchName].players[1]);
+          } else if (round[matchName].players.indexOf(this.name) === 1) {
+            opponents.push(round[matchName].players[0]);
+          }
+        }
+      }
+    };
+
+    return opponents;
   };
 
   var Match = function () {
