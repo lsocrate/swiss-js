@@ -204,4 +204,8 @@ var SwissTournament = function () {
 
     return this;
   };
+
+  this.ranking = function () {
+    return this.players.map(function (player) {return player.name;});
+  };
 };

@@ -235,3 +235,10 @@ test("Rank players with ms", function () {
   equal(tournament.getPlayer('Eliot').getPosition(), 7);
   equal(tournament.getPlayer('Anna').getPosition(), 8);
 });
+
+test("Get final ranking", function () {
+  var tournament = getCompleteTournament();
+  var ranking = tournament.end().ranking();
+
+  deepEqual(ranking, ['Henry', 'Dennis', 'George', 'Claude', 'Francis', 'Bob', 'Eliot', 'Anna']);
+});
