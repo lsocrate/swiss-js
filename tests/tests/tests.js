@@ -119,8 +119,6 @@ test("Get player", function () {
 });
 test("Get player opponents", function () {
   var tournament = getCompleteTournament();
-  tournament.end();
-
   var opponents = tournament.getPlayer('Anna').getOpponents();
 
   deepEqual(opponents, ['Bob', 'Claude', 'Eliot'])
