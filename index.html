@@ -15,6 +15,24 @@
     <script src="js/libs/modernizr-2.5.3.min.js"></script>
   </head>
   <body>
+    <h1>Swiss L5R Tournament</h1>
+    <nav>
+      <button class="js-button" data-action="addPlayer">Add Player</button>
+      <button class="js-button" data-action="startRound">Start round</button>
+      <button class="js-button" data-action="endTournament">End tournament</button>
+    </nav>
+    <table class="ranking">
+      <tr class="ranking-header">
+        <th class="ranking-header ranking-player">Player</th>
+        <th class="ranking-header ranking-clan">Clan</th>
+        <th class="ranking-header ranking-points">Points</th>
+      </tr>
+      <tr class="ranking-row" data-player-id="">
+        <td class="ranking-header ranking-player" data-attribute="name"></td>
+        <td class="ranking-header ranking-clan" data-attribute="clan"></td>
+        <td class="ranking-header ranking-points" data-attribute="points"></td>
+      </tr>
+    </table>
     <script src="js/bootstrap.js"></script>
   </body>
 </html>
