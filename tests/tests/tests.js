@@ -87,14 +87,14 @@ function getCompleteTournament(){
   tournament.getMatch('Francis', 'George').reportWinner('George');
   tournament.getRound().addMatch('Anna', 'Eliot');
   tournament.getMatch('Anna', 'Eliot').reportWinner('Eliot');
-  // Henry   => 3-0 = [points 3][ms 2x1x2 = 5]
-  // Dennis  => 2-0 = [points 2][ms 2x1x3 = 6]
-  // George  => 2-0 = [points 2][ms 3x1x1 = 5]
-  // Claude  => 2-0 = [points 2][ms 2x0x1 = 3]
-  // Francis => 1-0 = [points 1][ms 1x3x2 = 6]
-  // Bob     => 1-0 = [points 1][ms 0x2x2 = 4]
-  // Eliot   => 1-0 = [points 1][ms 1x2x0 = 3]
-  // Anna    => 0-0 = [points 0][ms 1x2x1 = 4]
+  // Henry   => 3-0 = [points 3][ms from victories 5][ms total = 5]
+  // Dennis  => 2-0 = [points 2][ms from victories 3][ms total = 6]
+  // George  => 2-0 = [points 2][ms from victories 2][ms total = 5]
+  // Claude  => 2-0 = [points 2][ms from victories 1][ms total = 3]
+  // Francis => 1-0 = [points 1][ms from victories 1][ms total = 6]
+  // Bob     => 1-0 = [points 1][ms from victories 0][ms total = 4]
+  // Eliot   => 1-0 = [points 1][ms from victories 0][ms total = 3]
+  // Anna    => 0-0 = [points 0][ms from victories 0][ms total = 4]
 
   tournament.updateRanking();
 
