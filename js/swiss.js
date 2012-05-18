@@ -182,18 +182,28 @@ var SwissTournament = function () {
     this.addRound();
 
     var groupsToMatch = getPlayersByPointsGroup();
-    var oddPlayer;
+    var oddPlayer = false;
     for (var i = groupsToMatch.length - 1; i >= 0; i--) {
       var group = groupsToMatch[i];
 
-      while(group.length >= 2) {
-        var player1 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
-        var player2 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
+      while(group.length > 1) {
+        var player1, player2;
+
+        if (oddPlayer) {
+          player1 = oddPlayer;
+          oddPlayer = false;
+        } else {
+         player1 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
+        }
+
+        player2 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
 
         this.getRound().addMatch(player1.name, player2.name);
       }
       if (group.length) {
         oddPlayer = group[0];
+      } else {
+        oddPlayer = false;
       }
     };
   }
