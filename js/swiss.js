@@ -1,6 +1,6 @@
 var Player = function (tournament, name, clan) {
-  this.id         = this.tournament.generatePlayerId();
   this.tournament = tournament;
+  this.id         = this.tournament.generatePlayerId();
   this.name       = name;
   this.clan       = clan.toLowerCase();
   this.points     = 0;
