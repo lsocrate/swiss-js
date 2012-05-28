@@ -40,6 +40,7 @@ Player.prototype.calculateMs = function () {
   for (var i = 0; i < opponents.length; i++) {
     var opponentName = opponents[i];
     this.msT += this.tournament.getPlayer(opponentName).points;
+
     if(this.tournament.getMatch(opponentName, this.name).winner === this.name) {
       this.msW += this.tournament.getPlayer(opponentName).points;
     }
@@ -48,14 +49,11 @@ Player.prototype.calculateMs = function () {
 
 var Match = function (tournament) {
   this.tournament = tournament;
-  this.name = undefined;
-  this.players = [
-    arguments[1].name,
-    arguments[2].name
-  ];
-  this.winner  = undefined;
-  this.isDone  = false;
-  this.name = this.tournament.makeMatchName(this.tournament.getPlayer(this.players[0]), this.tournament.getPlayer(this.players[1]));
+  this.name       = undefined;
+  this.players    = [arguments[1].name, arguments[2].name];
+  this.winner     = undefined;
+  this.isDone     = false;
+  this.name       = this.tournament.makeMatchName(this.tournament.getPlayer(this.players[0]), this.tournament.getPlayer(this.players[1]));
 };
 Match.prototype.reportWinner = function(winnerName) {
   this.winner = winnerName;
@@ -71,7 +69,7 @@ Match.prototype.reportDraw = function() {
 
 var Round = function (tournament) {
   this.tournament = tournament;
-  this.matches = {};
+  this.matches    = {};
 };
 Round.prototype.addMatch = function (player1Name, player2Name) {
   var player1 = this.tournament.getPlayer(player1Name);
@@ -90,10 +88,10 @@ Round.prototype.addMatch = function (player1Name, player2Name) {
 
 var SwissTournament = function () {
   this.players = [];
-  this.rounds = [];
+  this.rounds  = [];
 
-  var tournament = this;
   var currentPlayerId = 0;
+  var tournament      = this;
 
   this.makeMatchName = function () {
     var players = [].slice.apply(arguments).map(function (player) {
