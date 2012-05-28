@@ -53,7 +53,7 @@ var SwissTournament = function () {
   var tournament = this;
   var currentPlayerId = 0;
 
-  var makeMatchName = function () {
+  this.makeMatchName = function () {
     var players = [].slice.apply(arguments).map(function (player) {
       return player.name;
     });
@@ -73,7 +73,7 @@ var SwissTournament = function () {
     this.isDone  = false;
 
     if (arguments.length) {
-      this.name = makeMatchName.apply(null, arguments);
+      this.name = tournament.makeMatchName.apply(null, arguments);
       this.players = [].slice.apply(arguments).map(function (player) {
         return player.name;
       });
@@ -99,7 +99,7 @@ var SwissTournament = function () {
     var player2 = tournament.getPlayer(player2Name);
 
     if (player1 && player2) {
-      var matchName = makeMatchName(player1, player2);
+      var matchName = tournament.makeMatchName(player1, player2);
 
       this[matchName] = new Match(player1, player2);
 
@@ -136,7 +136,7 @@ var SwissTournament = function () {
     var player2 = this.getPlayer(player2Name);
 
     if (player1 && player2) {
-      var matchName = makeMatchName(player1, player2);
+      var matchName = this.makeMatchName(player1, player2);
 
       for (var i = 0; i < this.rounds.length; i++) {
         var round = this.rounds[i];

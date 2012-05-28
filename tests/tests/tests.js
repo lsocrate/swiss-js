@@ -214,6 +214,15 @@ test("Generate rounds with odd numbered tier", function () {
 });
 
 module('Matches');
+test("Make match name", function () {
+  var tournament = getTestTournament();
+  var anna = tournament.getPlayer('Anna');
+  var bob = tournament.getPlayer('Bob');
+
+  equal(tournament.makeMatchName(anna, bob), 'anna@bob');
+  equal(tournament.makeMatchName(bob, anna), 'anna@bob');
+});
+
 test("Get match", function () {
   var tournament = getTestRound1();
 
