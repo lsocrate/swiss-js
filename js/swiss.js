@@ -1,3 +1,51 @@
+var Player = function (tournament, name, clan) {
+  this.id         = this.tournament.generatePlayerId();
+  this.tournament = tournament;
+  this.name       = name;
+  this.clan       = clan.toLowerCase();
+  this.points     = 0;
+  this.msW        = 0;
+  this.msT        = 0;
+};
+Player.prototype.getPosition = function () {
+  for (var i = 0; i < this.tournament.players.length; i++) {
+    var player = this.tournament.players[i];
+    if (player.id === this.id) {
+      return ++i;
+    }
+  };
+};
+Player.prototype.getOpponents = function () {
+  var opponents = [];
+
+  for (var i = 0; i < this.tournament.rounds.length; i++) {
+    var round = this.tournament.rounds[i];
+
+    for (var matchName in round) {
+      if (round.hasOwnProperty(matchName)){
+        if (round[matchName].players.indexOf(this.name) === 0) {
+          opponents.push(round[matchName].players[1]);
+        } else if (round[matchName].players.indexOf(this.name) === 1) {
+          opponents.push(round[matchName].players[0]);
+        }
+      }
+    }
+  };
+
+  return opponents;
+};
+Player.prototype.calculateMs = function () {
+  var opponents = this.getOpponents();
+
+  for (var i = 0; i < opponents.length; i++) {
+    var opponentName = opponents[i];
+    this.msT += this.tournament.getPlayer(opponentName).points;
+    if(this.tournament.getMatch(opponentName, this.name).winner === this.name) {
+      this.msW += this.tournament.getPlayer(opponentName).points;
+    }
+  };
+};
+
 var SwissTournament = function () {
   this.players = [];
   this.rounds = [];
@@ -13,56 +61,10 @@ var SwissTournament = function () {
     return players.sort().join('@').toLowerCase();
   };
 
-  var generatePlayerId = function () {
+  this.generatePlayerId = function () {
     return currentPlayerId++;
   };
 
-  var Player = function (name, clan) {
-    this.name   = name;
-    this.clan   = clan.toLowerCase();
-    this.points = 0;
-    this.msW    = 0;
-    this.msT    = 0;
-    this.id     = generatePlayerId();
-  };
-  Player.prototype.getPosition = function () {
-    for (var i = 0; i < tournament.players.length; i++) {
-      var player = tournament.players[i];
-      if (player.id === this.id) {
-        return ++i;
-      }
-    };
-  };
-  Player.prototype.getOpponents = function () {
-    var opponents = [];
-
-    for (var i = 0; i < tournament.rounds.length; i++) {
-      var round = tournament.rounds[i];
-
-      for (var matchName in round) {
-        if (round.hasOwnProperty(matchName)){
-          if (round[matchName].players.indexOf(this.name) === 0) {
-            opponents.push(round[matchName].players[1]);
-          } else if (round[matchName].players.indexOf(this.name) === 1) {
-            opponents.push(round[matchName].players[0]);
-          }
-        }
-      }
-    };
-
-    return opponents;
-  };
-  Player.prototype.calculateMs = function () {
-    var opponents = this.getOpponents();
-
-    for (var i = 0; i < opponents.length; i++) {
-      var opponentName = opponents[i];
-      this.msT += tournament.getPlayer(opponentName).points;
-      if(tournament.getMatch(opponentName, this.name).winner === this.name) {
-        this.msW += tournament.getPlayer(opponentName).points;
-      }
-    };
-  };
 
   var Match = function () {
     this.name = undefined;
@@ -108,7 +110,7 @@ var SwissTournament = function () {
   };
 
   this.addPlayer = function (name, clan) {
-    this.players.push(new Player(name, clan));
+    this.players.push(new Player(this, name, clan));
 
     return this;
   };
