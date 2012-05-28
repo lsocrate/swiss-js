@@ -46,6 +46,29 @@ Player.prototype.calculateMs = function () {
   };
 };
 
+var Match = function (tournament) {
+  this.tournament = tournament;
+  this.name = undefined;
+  this.players = [
+    arguments[1].name,
+    arguments[2].name
+  ];
+  this.winner  = undefined;
+  this.isDone  = false;
+  this.name = this.tournament.makeMatchName(this.tournament.getPlayer(this.players[0]), this.tournament.getPlayer(this.players[1]));
+};
+Match.prototype.reportWinner = function(winnerName) {
+  this.winner = winnerName;
+  this.isDone = true;
+
+  this.tournament.getPlayer(winnerName).points++;
+};
+
+Match.prototype.reportDraw = function() {
+  this.winner = undefined;
+  this.isDone = true;
+};
+
 var SwissTournament = function () {
   this.players = [];
   this.rounds = [];
@@ -65,32 +88,6 @@ var SwissTournament = function () {
     return currentPlayerId++;
   };
 
-
-  var Match = function () {
-    this.name = undefined;
-    this.players = [];
-    this.winner  = undefined;
-    this.isDone  = false;
-
-    if (arguments.length) {
-      this.name = tournament.makeMatchName.apply(null, arguments);
-      this.players = [].slice.apply(arguments).map(function (player) {
-        return player.name;
-      });
-    }
-  };
-  Match.prototype.reportWinner = function(winnerName) {
-    this.winner = winnerName;
-    this.isDone = true;
-
-    tournament.getPlayer(winnerName).points++;
-  };
-
-  Match.prototype.reportDraw = function() {
-    this.winner = undefined;
-    this.isDone = true;
-  };
-
   var Round = function () {
 
   };
@@ -101,7 +98,7 @@ var SwissTournament = function () {
     if (player1 && player2) {
       var matchName = tournament.makeMatchName(player1, player2);
 
-      this[matchName] = new Match(player1, player2);
+      this[matchName] = new Match(tournament, player1, player2);
 
       return {error:false};
     } else {
