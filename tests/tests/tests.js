@@ -26,10 +26,11 @@ function decideWinner(players){
 }
 
 function autoPlayRound(tournament) {
-  var roundMatches = tournament.getRound();
-  for(var match in roundMatches) {
-    if(roundMatches.hasOwnProperty(match)) {
-      roundMatches[match].reportWinner(decideWinner(roundMatches[match].players));
+  var round = tournament.getRound();
+  for(var match in round.matches) {
+    if(round.matches.hasOwnProperty(match)) {
+
+      round.matches[match].reportWinner(decideWinner(round.matches[match].players));
     }
   }
 
@@ -178,7 +179,7 @@ test("Add match to round", function () {
   tournament.addRound();
   tournament.getRound(1).addMatch('Anna', 'Bob');
 
-  ok(tournament.getRound(1)['anna@bob']);
+  ok(tournament.getRound(1).matches['anna@bob']);
 
   var result = tournament.getRound(1).addMatch('Anna', 'Johnny');
   ok(result.error);
@@ -210,7 +211,7 @@ test("Generate rounds with odd numbered tier", function () {
   var tournament = getNonSquareTournamentWith1stRound();
   tournament.generateRound();
 
-  equal(Object.keys(tournament.getRound(2)).length, 5);
+  equal(Object.keys(tournament.getRound(2).matches).length, 5);
 });
 
 module('Matches');

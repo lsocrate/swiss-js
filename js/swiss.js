@@ -21,12 +21,12 @@ Player.prototype.getOpponents = function () {
   for (var i = 0; i < this.tournament.rounds.length; i++) {
     var round = this.tournament.rounds[i];
 
-    for (var matchName in round) {
-      if (round.hasOwnProperty(matchName)){
-        if (round[matchName].players.indexOf(this.name) === 0) {
-          opponents.push(round[matchName].players[1]);
-        } else if (round[matchName].players.indexOf(this.name) === 1) {
-          opponents.push(round[matchName].players[0]);
+    for (var matchName in round.matches) {
+      if (round.matches.hasOwnProperty(matchName)){
+        if (round.matches[matchName].players.indexOf(this.name) === 0) {
+          opponents.push(round.matches[matchName].players[1]);
+        } else if (round.matches[matchName].players.indexOf(this.name) === 1) {
+          opponents.push(round.matches[matchName].players[0]);
         }
       }
     }
@@ -69,6 +69,25 @@ Match.prototype.reportDraw = function() {
   this.isDone = true;
 };
 
+var Round = function (tournament) {
+  this.tournament = tournament;
+  this.matches = {};
+};
+Round.prototype.addMatch = function (player1Name, player2Name) {
+  var player1 = this.tournament.getPlayer(player1Name);
+  var player2 = this.tournament.getPlayer(player2Name);
+
+  if (player1 && player2) {
+    var matchName = this.tournament.makeMatchName(player1, player2);
+
+    this.matches[matchName] = new Match(this.tournament, player1, player2);
+
+    return {error:false};
+  } else {
+    return {error:true};
+  }
+};
+
 var SwissTournament = function () {
   this.players = [];
   this.rounds = [];
@@ -88,24 +107,6 @@ var SwissTournament = function () {
     return currentPlayerId++;
   };
 
-  var Round = function () {
-
-  };
-  Round.prototype.addMatch = function (player1Name, player2Name) {
-    var player1 = tournament.getPlayer(player1Name);
-    var player2 = tournament.getPlayer(player2Name);
-
-    if (player1 && player2) {
-      var matchName = tournament.makeMatchName(player1, player2);
-
-      this[matchName] = new Match(tournament, player1, player2);
-
-      return {error:false};
-    } else {
-      return {error:true};
-    }
-  };
-
   this.addPlayer = function (name, clan) {
     this.players.push(new Player(this, name, clan));
 
@@ -121,7 +122,7 @@ var SwissTournament = function () {
   };
 
   this.addRound = function () {
-    this.rounds.push(new Round());
+    this.rounds.push(new Round(this));
   };
 
   this.getRound = function (roundNumber) {
@@ -138,8 +139,8 @@ var SwissTournament = function () {
       for (var i = 0; i < this.rounds.length; i++) {
         var round = this.rounds[i];
 
-        if (round[matchName]) {
-          return round[matchName];
+        if (round.matches[matchName]) {
+          return round.matches[matchName];
         }
       };
     }
