@@ -135,21 +135,24 @@ var SwissTournament = function () {
     }
   };
 
-  this.updateRanking = function () {
-    this.players.sort(function (a, b) {
+  var simpleRank = function (a, b) {
+    return b.points - a.points;
+  };
+  var completeRank = function (a, b) {
+    if (b.points !== a.points) {
       return b.points - a.points;
-    });
+    } else if(b.msW !== a.msW) {
+      return b.msW - a.msW;
+    } else {
+      return b.msL - a.msL;
+    }
+  };
+
+  this.updateRanking = function () {
+    this.players.sort(simpleRank);
   };
   this.updateFinalRanking = function() {
-    this.players.sort(function (a, b) {
-      if (b.points !== a.points) {
-        return b.points - a.points;
-      } else if(b.msW !== a.msW) {
-        return b.msW - a.msW;
-      } else {
-        return b.msL - a.msL;
-      }
-    });
+    this.players.sort(completeRank);
   };
 
   var getPlayersByPointsGroup = function () {
