@@ -19,7 +19,19 @@ yepnope([
     complete: function () {
       $(function($){
         window.tournament = new SwissJS.Tournament();
+        window.tournament
+          .addPlayer('Anna', 'Crab')
+          .addPlayer('Bob', 'Crane')
+          .addPlayer('Claude', 'Dragon')
+          .addPlayer('Dennis', 'Lion')
+          .addPlayer('Eliot', 'Mantis')
+          .addPlayer('Francis', 'Phoenix')
+          .addPlayer('George', 'Scorpion')
+          .addPlayer('Henry', 'Spider')
+          .addPlayer('Irvine', 'Spider')
+          .addPlayer('John', 'Spider');
         window.tournamentUI = new TournamentUI(window.tournament);
+        window.tournamentUI.updateRanking();
       });
     }
   },
