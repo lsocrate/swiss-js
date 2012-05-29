@@ -2,7 +2,9 @@ Array.prototype.popRandom = function() {
   return this.splice(Math.ceil(Math.random() * (this.length - 1)),1)[0];
 };
 
-var Player = function (tournament, name, clan) {
+var SwissJS = SwissJS || {};
+
+SwissJS.Player = function (tournament, name, clan) {
   this.tournament = tournament;
   this.id         = this.tournament.generatePlayerId();
   this.name       = name;
@@ -12,7 +14,7 @@ var Player = function (tournament, name, clan) {
   this.msL        = 0;
   this.opponents  = [];
 };
-Player.prototype.getPosition = function () {
+SwissJS.Player.prototype.getPosition = function () {
   for (var i = 0; i < this.tournament.players.length; i++) {
     var player = this.tournament.players[i];
     if (player.id === this.id) {
@@ -20,7 +22,7 @@ Player.prototype.getPosition = function () {
     }
   };
 };
-Player.prototype.calculateMs = function () {
+SwissJS.Player.prototype.calculateMs = function () {
   for (var i = 0; i < this.opponents.length; i++) {
     var opponentName = this.opponents[i];
 
@@ -32,7 +34,7 @@ Player.prototype.calculateMs = function () {
   };
 };
 
-var Match = function (tournament) {
+SwissJS.Match = function (tournament) {
   this.tournament = tournament;
   this.name       = undefined;
   this.players    = [
@@ -46,36 +48,36 @@ var Match = function (tournament) {
   arguments[1].opponents.push(arguments[2].name);
   arguments[2].opponents.push(arguments[1].name);
 };
-Match.prototype.reportWinner = function(winnerName) {
+SwissJS.Match.prototype.reportWinner = function(winnerName) {
   this.winner = winnerName;
   this.isDone = true;
 
   this.tournament.getPlayer(winnerName).points++;
 };
 
-Match.prototype.reportDraw = function() {
+SwissJS.Match.prototype.reportDraw = function() {
   this.winner = undefined;
   this.isDone = true;
 };
 
-var Round = function (tournament) {
+SwissJS.Round = function (tournament) {
   this.tournament = tournament;
   this.matches    = {};
 };
-Round.prototype.addMatch = function (player1Name, player2Name) {
+SwissJS.Round.prototype.addMatch = function (player1Name, player2Name) {
   var player1 = this.tournament.getPlayer(player1Name);
   var player2 = this.tournament.getPlayer(player2Name);
 
   if (player1 && player2) {
     var matchName = this.tournament.makeMatchName(player1, player2);
 
-    this.matches[matchName] = new Match(this.tournament, player1, player2);
+    this.matches[matchName] = new SwissJS.Match(this.tournament, player1, player2);
   } else {
     return {error:true};
   }
 };
 
-var SwissTournament = function () {
+SwissJS.Tournament = function () {
   this.players = [];
   this.rounds  = [];
 
@@ -95,7 +97,7 @@ var SwissTournament = function () {
   };
 
   this.addPlayer = function (name, clan) {
-    this.players.push(new Player(this, name, clan));
+    this.players.push(new SwissJS.Player(this, name, clan));
 
     return this;
   };
@@ -109,7 +111,7 @@ var SwissTournament = function () {
   };
 
   this.addRound = function () {
-    this.rounds.push(new Round(this));
+    this.rounds.push(new SwissJS.Round(this));
   };
 
   this.getRound = function (roundNumber) {
@@ -155,6 +157,7 @@ var SwissTournament = function () {
 
   var getPlayersByPointsGroup = function () {
     var groups = [];
+
     for (var i = 0; i < tournament.players.length; i++) {
       var player = tournament.players[i];
       if (typeof groups[player.points] === 'undefined') {

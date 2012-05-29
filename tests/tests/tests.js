@@ -1,5 +1,5 @@
 function getTestTournament() {
-  return new SwissTournament()
+  return new SwissJS.Tournament()
     .addPlayer('Anna', 'Crab')
     .addPlayer('Bob', 'Crane')
     .addPlayer('Claude', 'Dragon')
@@ -135,7 +135,7 @@ function getNonSquareTournamentWith1stRound(){
 
 module('Player');
 test("Add player", function () {
-  var tournament = new SwissTournament();
+  var tournament = new SwissJS.Tournament();
 
   tournament.addPlayer('Anna', 'Scorpion');
   equal(tournament.players.length, 1);
