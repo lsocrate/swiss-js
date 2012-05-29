@@ -149,12 +149,6 @@ test("Get player", function () {
   equal(player.clan, 'crab');
   equal(player.points, 0);
 });
-test("Get player opponents", function () {
-  var tournament = getCompleteTournament();
-  var opponents = tournament.getPlayer('Anna').getOpponents();
-
-  deepEqual(opponents, ['Bob', 'Claude', 'Eliot'])
-});
 
 module('Round');
 test("New round", function () {

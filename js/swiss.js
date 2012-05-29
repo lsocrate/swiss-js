@@ -10,6 +10,7 @@ var Player = function (tournament, name, clan) {
   this.points     = 0;
   this.msW        = 0;
   this.msL        = 0;
+  this.opponents  = [];
 };
 Player.prototype.getPosition = function () {
   for (var i = 0; i < this.tournament.players.length; i++) {
@@ -19,30 +20,9 @@ Player.prototype.getPosition = function () {
     }
   };
 };
-Player.prototype.getOpponents = function () {
-  var opponents = [];
-
-  for (var i = 0; i < this.tournament.rounds.length; i++) {
-    var round = this.tournament.rounds[i];
-
-    for (var matchName in round.matches) {
-      if (round.matches.hasOwnProperty(matchName)){
-        if (round.matches[matchName].players.indexOf(this.name) === 0) {
-          opponents.push(round.matches[matchName].players[1]);
-        } else if (round.matches[matchName].players.indexOf(this.name) === 1) {
-          opponents.push(round.matches[matchName].players[0]);
-        }
-      }
-    }
-  };
-
-  return opponents;
-};
 Player.prototype.calculateMs = function () {
-  var opponents = this.getOpponents();
-
-  for (var i = 0; i < opponents.length; i++) {
-    var opponentName = opponents[i];
+  for (var i = 0; i < this.opponents.length; i++) {
+    var opponentName = this.opponents[i];
 
     if (this.tournament.getMatch(opponentName, this.name).winner === this.name) {
       this.msW += this.tournament.getPlayer(opponentName).points;
@@ -62,6 +42,9 @@ var Match = function (tournament) {
   this.winner     = undefined;
   this.isDone     = false;
   this.name       = this.tournament.makeMatchName(this.tournament.getPlayer(this.players[0]), this.tournament.getPlayer(this.players[1]));
+
+  arguments[1].opponents.push(arguments[2].name);
+  arguments[2].opponents.push(arguments[1].name);
 };
 Match.prototype.reportWinner = function(winnerName) {
   this.winner = winnerName;
