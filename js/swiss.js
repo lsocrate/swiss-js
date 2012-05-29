@@ -159,9 +159,9 @@ var SwissTournament = function () {
   };
   this.updateFinalRanking = function() {
     this.players.sort(function (a, b) {
-      if (b.points != a.points) {
+      if (b.points !== a.points) {
         return b.points - a.points;
-      } else if(b.msW != a.msW) {
+      } else if(b.msW !== a.msW) {
         return b.msW - a.msW;
       } else {
         return b.msL - a.msL;
