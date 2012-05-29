@@ -55,7 +55,10 @@ Player.prototype.calculateMs = function () {
 var Match = function (tournament) {
   this.tournament = tournament;
   this.name       = undefined;
-  this.players    = [arguments[1].name, arguments[2].name];
+  this.players    = [
+    arguments[1].name,
+    arguments[2].name
+  ];
   this.winner     = undefined;
   this.isDone     = false;
   this.name       = this.tournament.makeMatchName(this.tournament.getPlayer(this.players[0]), this.tournament.getPlayer(this.players[1]));
