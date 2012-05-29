@@ -70,8 +70,6 @@ Round.prototype.addMatch = function (player1Name, player2Name) {
     var matchName = this.tournament.makeMatchName(player1, player2);
 
     this.matches[matchName] = new Match(this.tournament, player1, player2);
-
-    return {error:false};
   } else {
     return {error:true};
   }
