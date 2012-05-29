@@ -6,18 +6,7 @@ var TournamentUI = function (tournament){
   var UI = this;
   $('nav').on('click', 'button', function (ev) {
     var action = $(this).data('action');
-
-    switch (action) {
-      case 'addPlayer':
-        UI.nav.addPlayer = $(this);
-        return UI.addPlayer();
-      case 'startRound':
-        UI.nav.startRound = $(this);
-        return;
-      case 'endTournament':
-        UI.nav.endTournament = $(this);
-        return;
-    }
+    UI[action]();
   });
 
   $(this.tournament).on('rankUpdated', this.updateRanking);
