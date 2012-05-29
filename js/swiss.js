@@ -191,7 +191,7 @@ var SwissTournament = function () {
           player1 = oddPlayer;
           oddPlayer = false;
         } else {
-         player1 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
+          player1 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
         }
 
         player2 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
