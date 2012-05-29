@@ -53,11 +53,13 @@ SwissJS.Match.prototype.reportWinner = function(winnerName) {
   this.isDone = true;
 
   this.tournament.getPlayer(winnerName).points++;
+  $(this.tournament).trigger('matchReported');
 };
 
 SwissJS.Match.prototype.reportDraw = function() {
   this.winner = undefined;
   this.isDone = true;
+  $(this.tournament).trigger('matchReported');
 };
 
 SwissJS.Round = function (tournament) {
@@ -81,6 +83,8 @@ SwissJS.Tournament = function () {
   this.players = [];
   this.rounds  = [];
   this.currentPlayerId = 0;
+
+  $(this).on('playerAdded', this.updateRanking);
 };
 SwissJS.Tournament.prototype.makeMatchName = function () {
     var players = [].slice.apply(arguments).map(function (player) {
@@ -92,20 +96,12 @@ SwissJS.Tournament.prototype.makeMatchName = function () {
 SwissJS.Tournament.prototype.generatePlayerId = function () {
   return this.currentPlayerId++;
 };
-SwissJS.Tournament.prototype.addPlayer = function (name, clan) {
-  this.players.push(new SwissJS.Player(this, name, clan));
-
-  return this;
-};
 SwissJS.Tournament.prototype.getPlayer = function (name) {
   for (var i = 0; i < this.players.length; i++) {
     if (this.players[i].name === name) {
       return this.players[i];
     }
   }
-};
-SwissJS.Tournament.prototype.addRound = function () {
-  this.rounds.push(new SwissJS.Round(this));
 };
 SwissJS.Tournament.prototype.getRound = function (roundNumber) {
   return (typeof roundNumber === 'number') ? this.rounds[roundNumber - 1] : this.rounds[this.rounds.length - 1];
@@ -126,21 +122,6 @@ SwissJS.Tournament.prototype.getMatch = function (player1Name, player2Name) {
     };
   }
 };
-SwissJS.Tournament.prototype.end = function () {
-  this.updateRanking();
-
-  for (var i = 0; i < this.players.length; i++) {
-    var player = this.players[i];
-    player.calculateMs();
-  };
-
-  this.updateFinalRanking();
-
-  return this;
-};
-SwissJS.Tournament.prototype.ranking = function () {
-  return this.players.map(function (player) {return player.name;});
-};
 SwissJS.Tournament.prototype.simpleRank = function (a, b) {
   return b.points - a.points;
 };
@@ -152,9 +133,6 @@ SwissJS.Tournament.prototype.completeRank = function (a, b) {
   } else {
     return b.msL - a.msL;
   }
-};
-SwissJS.Tournament.prototype.updateRanking = function () {
-  this.players.sort(this.simpleRank);
 };
 SwissJS.Tournament.prototype.updateFinalRanking = function() {
   this.players.sort(this.completeRank);
@@ -172,6 +150,37 @@ SwissJS.Tournament.prototype.getPlayersByPointsGroup = function () {
   };
 
   return groups;
+};
+
+/**
+ *  EVENTED ACTIONS
+ */
+SwissJS.Tournament.prototype.addPlayer = function (name, clan) {
+  this.players.push(new SwissJS.Player(this, name, clan));
+  $(this).trigger('playerAdded');
+
+  return this;
+};
+SwissJS.Tournament.prototype.addRound = function () {
+  this.rounds.push(new SwissJS.Round(this));
+  $(this).trigger('roundAdded');
+};
+SwissJS.Tournament.prototype.end = function () {
+  this.updateRanking();
+
+  for (var i = 0; i < this.players.length; i++) {
+    var player = this.players[i];
+    player.calculateMs();
+  };
+
+  this.updateFinalRanking();
+  $(this).trigger('tournamentEnded');
+
+  return this;
+};
+SwissJS.Tournament.prototype.updateRanking = function () {
+  this.players.sort(this.simpleRank);
+  $(this).trigger('rankUpdated');
 };
 SwissJS.Tournament.prototype.generateRound = function () {
   this.updateRanking();
@@ -202,4 +211,6 @@ SwissJS.Tournament.prototype.generateRound = function () {
       oddPlayer = false;
     }
   };
+
+  $(this).trigger('newRound');
 }
