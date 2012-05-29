@@ -1,3 +1,7 @@
+Array.prototype.popRandom = function() {
+  return this.splice(Math.ceil(Math.random() * (this.length - 1)),1)[0];
+};
+
 var Player = function (tournament, name, clan) {
   this.tournament = tournament;
   this.id         = this.tournament.generatePlayerId();
@@ -191,10 +195,10 @@ var SwissTournament = function () {
           player1 = oddPlayer;
           oddPlayer = false;
         } else {
-          player1 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
+          player1 = group.popRandom();
         }
 
-        player2 = group.splice(Math.ceil(Math.random() * (group.length - 1)),1)[0];
+        player2 = group.popRandom();
 
         this.getRound().addMatch(player1.name, player2.name);
       }
