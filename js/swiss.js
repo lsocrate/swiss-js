@@ -9,7 +9,7 @@ var Player = function (tournament, name, clan) {
   this.clan       = clan.toLowerCase();
   this.points     = 0;
   this.msW        = 0;
-  this.msT        = 0;
+  this.msL        = 0;
 };
 Player.prototype.getPosition = function () {
   for (var i = 0; i < this.tournament.players.length; i++) {
@@ -43,10 +43,11 @@ Player.prototype.calculateMs = function () {
 
   for (var i = 0; i < opponents.length; i++) {
     var opponentName = opponents[i];
-    this.msT += this.tournament.getPlayer(opponentName).points;
 
-    if(this.tournament.getMatch(opponentName, this.name).winner === this.name) {
+    if (this.tournament.getMatch(opponentName, this.name).winner === this.name) {
       this.msW += this.tournament.getPlayer(opponentName).points;
+    } else {
+      this.msL += this.tournament.getPlayer(opponentName).points;
     }
   };
 };
@@ -160,7 +161,7 @@ var SwissTournament = function () {
       } else if(b.msW != a.msW) {
         return b.msW - a.msW;
       } else {
-        return b.msT - a.msT;
+        return b.msL - a.msL;
       }
     });
   };
