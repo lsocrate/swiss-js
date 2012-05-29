@@ -4,36 +4,38 @@ var TournamentUI = function (tournament){
   this.ranking    = $('.ranking');
 
   var UI = this;
-  $('nav button').each(function () {
-    $(this).on('click', function (ev) {
-      var action = $(this).data('action');
+  $('nav').on('click', 'button', function (ev) {
+    var action = $(this).data('action');
 
-      switch (action) {
-        case 'addPlayer':
-          UI.nav.addPlayer = $(this);
-          return UI.addPlayer();
-        case 'startRound':
-        case 'endTournament':
-        default:
-      }
-    });
+    switch (action) {
+      case 'addPlayer':
+        UI.nav.addPlayer = $(this);
+        return UI.addPlayer();
+      case 'startRound':
+        UI.nav.startRound = $(this);
+        return;
+      case 'endTournament':
+        UI.nav.endTournament = $(this);
+        return;
+    }
   });
+
+  $(this.tournament).on('rankUpdated', this.updateRanking);
 };
 
 TournamentUI.prototype.addPlayer = function () {
-  var playerName, playerClan;
-
-  playerName = prompt('Player name');
+  var playerName = prompt('Player name');
   if (typeof playerName !== 'string') {
     return;
   }
 
-  playerClan = prompt('Player clan');
+  var playerClan = prompt('Player clan');
+
   this.tournament.addPlayer(playerName, playerClan);
-  this.updateRanking();
 };
 TournamentUI.prototype.updateRanking = function() {
   var UI = this;
+
   this.ranking.find('.ranking-row').remove();
   $.each(this.tournament.players, function (index, player) {
     var row = $('<tr/>', {
