@@ -252,19 +252,20 @@ test("Generate possible matches matrix", function () {
   var matrix = new SwissJS.MatchesMatrix(tournament, players);
 
   equal(matrix.possibilities.length, 6);
-
-  var tournament2 = getTestTournament();
-  tournament2.addRound();
-  tournament2.getRound().addMatch('Anna', 'Bob');
-  var players2 = [
-    tournament2.getPlayer('Anna'),
-    tournament2.getPlayer('Bob'),
-    tournament2.getPlayer('Claude'),
-    tournament2.getPlayer('Dennis')
+});
+test("Generate possible matches matrix with repeated and oddPlayer", function () {
+  var tournament = getTestTournament();
+  tournament.addRound();
+  tournament.getRound().addMatch('Anna', 'Bob');
+  var players = [
+    tournament.getPlayer('Anna'),
+    tournament.getPlayer('Bob'),
+    tournament.getPlayer('Claude')
   ];
-  var matrix2 = new SwissJS.MatchesMatrix(tournament2, players2);
+  var oddPlayer = tournament.getPlayer('Dennis');
+  var matrix = new SwissJS.MatchesMatrix(tournament, players, oddPlayer);
 
-  equal(matrix2.possibilities.length, 5);
+  equal(matrix.possibilities.length, 5);
 });
 
 module('Ranking');

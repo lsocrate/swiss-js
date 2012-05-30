@@ -184,15 +184,20 @@ SwissJS.Tournament.prototype.updateRanking = function () {
 };
 
 
-SwissJS.MatchesMatrix = function (tournament, playerCollection) {
+SwissJS.MatchesMatrix = function (tournament, playerCollection, oddPlayer) {
   this.tournament    = tournament;
+  this.players       = playerCollection;
   this.possibilities = [];
 
-  while (playerCollection.length > 1) {
-    var player1 = playerCollection.pop();
+  if (oddPlayer) {
+    this.players.push(oddPlayer);
+  }
 
-    for (var i = 0; i < playerCollection.length; i++) {
-      var player2 = playerCollection[i];
+  while (this.players.length > 1) {
+    var player1 = this.players.pop();
+
+    for (var i = 0; i < this.players.length; i++) {
+      var player2 = this.players[i];
 
       if (!this.tournament.getMatch(player1.name, player2.name)) {
         this.possibilities.push([player1, player2]);
