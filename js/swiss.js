@@ -190,6 +190,7 @@ SwissJS.MatchesMatrix = function (tournament, playerCollection, oddPlayer) {
   this.possibilities = [];
 
   if (oddPlayer) {
+    this.oddPlayer = oddPlayer;
     this.players.push(oddPlayer);
   }
 
@@ -204,6 +205,16 @@ SwissJS.MatchesMatrix = function (tournament, playerCollection, oddPlayer) {
       }
     };
   }
+};
+SwissJS.MatchesMatrix.prototype.removePlayerMatches = function (player) {
+  this.possibilities = this.possibilities.filter(function (match) {
+    return !(match[0].id === player.id || match[1].id === player.id);
+  });
+};
+SwissJS.MatchesMatrix.prototype.getPlayerMatches = function (player) {
+  return this.possibilities.filter(function (match) {
+    return (match[0].id === player.id || match[1].id === player.id);
+  });
 };
 SwissJS.Tournament.prototype.generateRound = function () {
   this.updateRanking();

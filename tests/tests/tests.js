@@ -267,6 +267,36 @@ test("Generate possible matches matrix with repeated and oddPlayer", function ()
 
   equal(matrix.possibilities.length, 5);
 });
+test("Remove player matches", function () {
+  var tournament = getTestTournament();
+  tournament.addRound();
+  tournament.getRound().addMatch('Anna', 'Bob');
+  var players = [
+    tournament.getPlayer('Anna'),
+    tournament.getPlayer('Bob'),
+    tournament.getPlayer('Claude')
+  ];
+  var oddPlayer = tournament.getPlayer('Dennis');
+  var matrix = new SwissJS.MatchesMatrix(tournament, players, oddPlayer);
+  matrix.removePlayerMatches(oddPlayer);
+
+  equal(matrix.possibilities.length, 2);
+});
+test("Get player matches", function () {
+  var tournament = getTestTournament();
+  tournament.addRound();
+  tournament.getRound().addMatch('Anna', 'Bob');
+  var players = [
+    tournament.getPlayer('Anna'),
+    tournament.getPlayer('Bob'),
+    tournament.getPlayer('Claude')
+  ];
+  var oddPlayer = tournament.getPlayer('Dennis');
+  var matrix = new SwissJS.MatchesMatrix(tournament, players, oddPlayer);
+  var matches = matrix.getPlayerMatches(oddPlayer);
+
+  equal(matches.length, 3);
+});
 
 module('Ranking');
 test("Rank players", function () {
