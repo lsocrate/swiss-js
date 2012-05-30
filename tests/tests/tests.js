@@ -241,6 +241,29 @@ test("Report match result", function () {
   equal(match2.winner, undefined);
   equal(match2.isDone, true);
 });
+test("Generate possible matches matrix", function () {
+  var tournament = getTestTournament();
+  var players = [
+    tournament.getPlayer('Anna'),
+    tournament.getPlayer('Bob'),
+    tournament.getPlayer('Claude'),
+    tournament.getPlayer('Dennis')
+  ];
+
+  equal(tournament.getPossibleMatches(players).length, 6);
+
+  var tournament2 = getTestTournament();
+  tournament2.addRound();
+  tournament2.getRound().addMatch('Anna', 'Bob');
+  var players2 = [
+    tournament2.getPlayer('Anna'),
+    tournament2.getPlayer('Bob'),
+    tournament2.getPlayer('Claude'),
+    tournament2.getPlayer('Dennis')
+  ];
+
+  equal(tournament2.getPossibleMatches(players2).length, 5);
+});
 
 module('Ranking');
 test("Rank players", function () {
