@@ -249,8 +249,9 @@ test("Generate possible matches matrix", function () {
     tournament.getPlayer('Claude'),
     tournament.getPlayer('Dennis')
   ];
+  var matrix = new SwissJS.MatchesMatrix(tournament, players);
 
-  equal(tournament.getPossibleMatches(players).length, 6);
+  equal(matrix.possibilities.length, 6);
 
   var tournament2 = getTestTournament();
   tournament2.addRound();
@@ -261,8 +262,9 @@ test("Generate possible matches matrix", function () {
     tournament2.getPlayer('Claude'),
     tournament2.getPlayer('Dennis')
   ];
+  var matrix2 = new SwissJS.MatchesMatrix(tournament2, players2);
 
-  equal(tournament2.getPossibleMatches(players2).length, 5);
+  equal(matrix2.possibilities.length, 5);
 });
 
 module('Ranking');

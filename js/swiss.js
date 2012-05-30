@@ -182,8 +182,11 @@ SwissJS.Tournament.prototype.updateRanking = function () {
   this.players.sort(this.simpleRank);
   $(this).trigger('rankUpdated');
 };
-SwissJS.Tournament.prototype.getPossibleMatches = function (playerCollection) {
-  var matchesMatrix = [];
+
+
+SwissJS.MatchesMatrix = function (tournament, playerCollection) {
+  this.tournament    = tournament;
+  this.possibilities = [];
 
   while (playerCollection.length > 1) {
     var player1 = playerCollection.pop();
@@ -191,13 +194,11 @@ SwissJS.Tournament.prototype.getPossibleMatches = function (playerCollection) {
     for (var i = 0; i < playerCollection.length; i++) {
       var player2 = playerCollection[i];
 
-      if (!this.getMatch(player1.name, player2.name)) {
-        matchesMatrix.push([player1, player2]);
+      if (!this.tournament.getMatch(player1.name, player2.name)) {
+        this.possibilities.push([player1, player2]);
       }
     };
   }
-
-  return matchesMatrix;
 };
 SwissJS.Tournament.prototype.generateRound = function () {
   this.updateRanking();
