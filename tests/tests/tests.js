@@ -12,11 +12,13 @@ function fillTournament(tournament) {
 function getTestRound1() {
   var tournament = fillTournament(new SwissJS.Tournament());
 
-  tournament.addRound();
-  tournament.getRound(1).addMatch('Anna', 'Bob');
-  tournament.getRound(1).addMatch('Claude', 'Dennis');
-  tournament.getRound(1).addMatch('Eliot', 'Francis');
-  tournament.getRound(1).addMatch('George', 'Henry');
+  with (tournament) {
+    addRound();
+    getRound(1).addMatch('Anna', 'Bob');
+    getRound(1).addMatch('Claude', 'Dennis');
+    getRound(1).addMatch('Eliot', 'Francis');
+    getRound(1).addMatch('George', 'Henry');
+  }
 
   return tournament;
 }
@@ -36,64 +38,66 @@ function autoPlayRound(tournament) {
 function getCompleteTournament(){
   var tournament = fillTournament(new SwissJS.Tournament());
 
-  tournament.rankPlayers();
-  tournament.addRound();
-  tournament.getRound().addMatch('Anna', 'Bob');
-  tournament.getMatch('Anna', 'Bob').reportWinner('Bob');
-  tournament.getRound().addMatch('Claude', 'Dennis');
-  tournament.getMatch('Claude', 'Dennis').reportWinner('Dennis');
-  tournament.getRound().addMatch('Eliot', 'Francis');
-  tournament.getMatch('Eliot', 'Francis').reportWinner('Francis');
-  tournament.getRound().addMatch('George', 'Henry');
-  tournament.getMatch('George', 'Henry').reportWinner('Henry');
-  // Bob     => 1-0
-  // Dennis  => 1-0
-  // Francis => 1-0
-  // Henry   => 1-0
-  // Anna    => 0-0
-  // Claude  => 0-0
-  // Eliot   => 0-0
-  // George  => 0-0
+  with (tournament) {
+    rankPlayers();
+    addRound();
+    getRound().addMatch('Anna', 'Bob');
+    getMatch('Anna', 'Bob').reportWinner('Bob');
+    getRound().addMatch('Claude', 'Dennis');
+    getMatch('Claude', 'Dennis').reportWinner('Dennis');
+    getRound().addMatch('Eliot', 'Francis');
+    getMatch('Eliot', 'Francis').reportWinner('Francis');
+    getRound().addMatch('George', 'Henry');
+    getMatch('George', 'Henry').reportWinner('Henry');
+    // Bob     => 1-0
+    // Dennis  => 1-0
+    // Francis => 1-0
+    // Henry   => 1-0
+    // Anna    => 0-0
+    // Claude  => 0-0
+    // Eliot   => 0-0
+    // George  => 0-0
 
-  tournament.rankPlayers();
-  tournament.addRound();
-  tournament.getRound().addMatch('Bob', 'Dennis');
-  tournament.getMatch('Bob', 'Dennis').reportWinner('Dennis');
-  tournament.getRound().addMatch('Francis', 'Henry');
-  tournament.getMatch('Francis', 'Henry').reportWinner('Henry');
-  tournament.getRound().addMatch('Claude', 'Anna');
-  tournament.getMatch('Claude', 'Anna').reportWinner('Claude');
-  tournament.getRound().addMatch('George', 'Eliot');
-  tournament.getMatch('George', 'Eliot').reportWinner('George');
-  // Dennis  => 2-0
-  // Henry   => 2-0
-  // Bob     => 1-0
-  // Francis => 1-0
-  // Claude  => 1-0
-  // George  => 1-0
-  // Anna    => 0-0
-  // Eliot   => 0-0
+    rankPlayers();
+    addRound();
+    getRound().addMatch('Bob', 'Dennis');
+    getMatch('Bob', 'Dennis').reportWinner('Dennis');
+    getRound().addMatch('Francis', 'Henry');
+    getMatch('Francis', 'Henry').reportWinner('Henry');
+    getRound().addMatch('Claude', 'Anna');
+    getMatch('Claude', 'Anna').reportWinner('Claude');
+    getRound().addMatch('George', 'Eliot');
+    getMatch('George', 'Eliot').reportWinner('George');
+    // Dennis  => 2-0
+    // Henry   => 2-0
+    // Bob     => 1-0
+    // Francis => 1-0
+    // Claude  => 1-0
+    // George  => 1-0
+    // Anna    => 0-0
+    // Eliot   => 0-0
 
-  tournament.rankPlayers();
-  tournament.addRound();
-  tournament.getRound().addMatch('Henry', 'Dennis');
-  tournament.getMatch('Henry', 'Dennis').reportWinner('Henry');
-  tournament.getRound().addMatch('Bob', 'Claude');
-  tournament.getMatch('Bob', 'Claude').reportWinner('Claude');
-  tournament.getRound().addMatch('Francis', 'George');
-  tournament.getMatch('Francis', 'George').reportWinner('George');
-  tournament.getRound().addMatch('Anna', 'Eliot');
-  tournament.getMatch('Anna', 'Eliot').reportWinner('Eliot');
-  // Henry   => 3-0 = [points 3][ms from victories 5][ms total = 5]
-  // Dennis  => 2-0 = [points 2][ms from victories 3][ms total = 6]
-  // George  => 2-0 = [points 2][ms from victories 2][ms total = 5]
-  // Claude  => 2-0 = [points 2][ms from victories 1][ms total = 3]
-  // Francis => 1-0 = [points 1][ms from victories 1][ms total = 6]
-  // Bob     => 1-0 = [points 1][ms from victories 0][ms total = 4]
-  // Eliot   => 1-0 = [points 1][ms from victories 0][ms total = 3]
-  // Anna    => 0-0 = [points 0][ms from victories 0][ms total = 4]
+    rankPlayers();
+    addRound();
+    getRound().addMatch('Henry', 'Dennis');
+    getMatch('Henry', 'Dennis').reportWinner('Henry');
+    getRound().addMatch('Bob', 'Claude');
+    getMatch('Bob', 'Claude').reportWinner('Claude');
+    getRound().addMatch('Francis', 'George');
+    getMatch('Francis', 'George').reportWinner('George');
+    getRound().addMatch('Anna', 'Eliot');
+    getMatch('Anna', 'Eliot').reportWinner('Eliot');
+    // Henry   => 3-0 = [points 3][ms from victories 5][ms total = 5]
+    // Dennis  => 2-0 = [points 2][ms from victories 3][ms total = 6]
+    // George  => 2-0 = [points 2][ms from victories 2][ms total = 5]
+    // Claude  => 2-0 = [points 2][ms from victories 1][ms total = 3]
+    // Francis => 1-0 = [points 1][ms from victories 1][ms total = 6]
+    // Bob     => 1-0 = [points 1][ms from victories 0][ms total = 4]
+    // Eliot   => 1-0 = [points 1][ms from victories 0][ms total = 3]
+    // Anna    => 0-0 = [points 0][ms from victories 0][ms total = 4]
 
-  tournament.rankPlayers();
+    rankPlayers();
+  }
 
   return tournament;
 }
@@ -164,23 +168,25 @@ test("Generate other rounds", function () {
   ok((Object.keys(this.tournament.getRound(3)).length > 0));
 });
 test("Generate rounds with odd numbered tier", function () {
-  this.tournament.addPlayer('Irvine', 'Spider');
-  this.tournament.addPlayer('John', 'Spider');
+  with (this.tournament) {
+    addPlayer('Irvine', 'Spider');
+    addPlayer('John', 'Spider');
 
-  this.tournament.rankPlayers();
-  this.tournament.addRound();
-  this.tournament.getRound().addMatch('Anna', 'Bob');
-  this.tournament.getMatch('Anna', 'Bob').reportWinner('Bob');
-  this.tournament.getRound().addMatch('Claude', 'Dennis');
-  this.tournament.getMatch('Claude', 'Dennis').reportWinner('Dennis');
-  this.tournament.getRound().addMatch('Eliot', 'Francis');
-  this.tournament.getMatch('Eliot', 'Francis').reportWinner('Francis');
-  this.tournament.getRound().addMatch('George', 'Henry');
-  this.tournament.getMatch('George', 'Henry').reportWinner('Henry');
-  this.tournament.getRound().addMatch('Irvine', 'John');
-  this.tournament.getMatch('Irvine', 'John').reportWinner('John');
+    rankPlayers();
+    addRound();
+    getRound().addMatch('Anna', 'Bob');
+    getMatch('Anna', 'Bob').reportWinner('Bob');
+    getRound().addMatch('Claude', 'Dennis');
+    getMatch('Claude', 'Dennis').reportWinner('Dennis');
+    getRound().addMatch('Eliot', 'Francis');
+    getMatch('Eliot', 'Francis').reportWinner('Francis');
+    getRound().addMatch('George', 'Henry');
+    getMatch('George', 'Henry').reportWinner('Henry');
+    getRound().addMatch('Irvine', 'John');
+    getMatch('Irvine', 'John').reportWinner('John');
 
-  this.tournament.generateRound();
+    generateRound();
+  }
 
   equal(Object.keys(this.tournament.getRound(2).matches).length, 5);
 });
