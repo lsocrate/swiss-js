@@ -9,20 +9,8 @@ function fillTournament(tournament) {
     .addPlayer('Henry', 'Spider');
 }
 
-function getTestTournament() {
-  return new SwissJS.Tournament()
-    .addPlayer('Anna', 'Crab')
-    .addPlayer('Bob', 'Crane')
-    .addPlayer('Claude', 'Dragon')
-    .addPlayer('Dennis', 'Lion')
-    .addPlayer('Eliot', 'Mantis')
-    .addPlayer('Francis', 'Phoenix')
-    .addPlayer('George', 'Scorpion')
-    .addPlayer('Henry', 'Spider');
-}
-
 function getTestRound1() {
-  var tournament = getTestTournament();
+  var tournament = fillTournament(new SwissJS.Tournament());
 
   tournament.addRound();
   tournament.getRound(1).addMatch('Anna', 'Bob');
@@ -32,16 +20,13 @@ function getTestRound1() {
 
   return tournament;
 }
-function decideWinner(players){
-  return players.sort()[1];
-}
 
 function autoPlayRound(tournament) {
   var round = tournament.getRound();
   for(var match in round.matches) {
     if(round.matches.hasOwnProperty(match)) {
 
-      round.matches[match].reportWinner(decideWinner(round.matches[match].players));
+      round.matches[match].reportWinner(round.matches[match].players.sort()[1]);
     }
   }
 
@@ -49,7 +34,7 @@ function autoPlayRound(tournament) {
 }
 
 function getCompleteTournament(){
-  var tournament = getTestTournament();
+  var tournament = fillTournament(new SwissJS.Tournament());
 
   tournament.rankPlayers();
   tournament.addRound();
