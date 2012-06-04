@@ -200,20 +200,25 @@ test("Generate rounds with odd numbered tier", function () {
   equal(Object.keys(this.tournament.getRound(2).matches).length, 5);
 });
 
-module('Matches');
+module('Matches', {
+  setup: function () {
+    this.tournament = fillTournament(new SwissJS.Tournament());
+    this.tournament2 = fillTournament(new SwissJS.Tournament());
+    this.tournament2.addRound();
+    this.tournament2.getRound(1).addMatch('Claude', 'Dennis');
+    this.tournament2.getRound(1).addMatch('Eliot', 'Francis');
+  }
+});
 test("Make match name", function () {
-  var tournament = getTestTournament();
-  var anna = tournament.getPlayer('Anna');
-  var bob = tournament.getPlayer('Bob');
+  var anna = this.tournament.getPlayer('Anna');
+  var bob = this.tournament.getPlayer('Bob');
 
-  equal(tournament.makeMatchName(anna, bob), 'anna@bob');
-  equal(tournament.makeMatchName(bob, anna), 'anna@bob');
+  equal(this.tournament.makeMatchName(anna, bob), 'anna@bob');
+  equal(this.tournament.makeMatchName(bob, anna), 'anna@bob');
 });
 
 test("Get match", function () {
-  var tournament = getTestRound1();
-
-  var match = tournament.getMatch('Claude', 'Dennis');
+  var match = this.tournament2.getMatch('Claude', 'Dennis');
   deepEqual(match.players, ['Claude', 'Dennis']);
   equal(match.name, 'claude@dennis');
   equal(match.winner, undefined);
@@ -221,70 +226,64 @@ test("Get match", function () {
 });
 
 test("Report match result", function () {
-  var tournament = getTestRound1();
-
-  var match = tournament.getMatch('Claude', 'Dennis');
+  var match = this.tournament2.getMatch('Claude', 'Dennis');
   match.reportWinner('Dennis');
   equal(match.winner, 'Dennis');
   equal(match.isDone, true);
 
-  var match2 = tournament.getMatch('Eliot', 'Francis');
+  var match2 = this.tournament2.getMatch('Eliot', 'Francis');
   match2.reportDraw();
   equal(match2.winner, undefined);
   equal(match2.isDone, true);
 });
 test("Generate possible matches matrix", function () {
-  var tournament = getTestTournament();
   var players = [
-    tournament.getPlayer('Anna'),
-    tournament.getPlayer('Bob'),
-    tournament.getPlayer('Claude'),
-    tournament.getPlayer('Dennis')
+    this.tournament.getPlayer('Anna'),
+    this.tournament.getPlayer('Bob'),
+    this.tournament.getPlayer('Claude'),
+    this.tournament.getPlayer('Dennis')
   ];
-  var matrix = new SwissJS.MatchesMatrix(tournament, players);
+  var matrix = new SwissJS.MatchesMatrix(this.tournament, players);
 
   equal(matrix.possibilities.length, 6);
 });
 test("Generate possible matches matrix with repeated and oddPlayer", function () {
-  var tournament = getTestTournament();
-  tournament.addRound();
-  tournament.getRound().addMatch('Anna', 'Bob');
+  this.tournament.addRound();
+  this.tournament.getRound().addMatch('Anna', 'Bob');
   var players = [
-    tournament.getPlayer('Anna'),
-    tournament.getPlayer('Bob'),
-    tournament.getPlayer('Claude')
+    this.tournament.getPlayer('Anna'),
+    this.tournament.getPlayer('Bob'),
+    this.tournament.getPlayer('Claude')
   ];
-  var oddPlayer = tournament.getPlayer('Dennis');
-  var matrix = new SwissJS.MatchesMatrix(tournament, players, oddPlayer);
+  var oddPlayer = this.tournament.getPlayer('Dennis');
+  var matrix = new SwissJS.MatchesMatrix(this.tournament, players, oddPlayer);
 
   equal(matrix.possibilities.length, 5);
 });
 test("Remove player matches", function () {
-  var tournament = getTestTournament();
-  tournament.addRound();
-  tournament.getRound().addMatch('Anna', 'Bob');
+  this.tournament.addRound();
+  this.tournament.getRound().addMatch('Anna', 'Bob');
   var players = [
-    tournament.getPlayer('Anna'),
-    tournament.getPlayer('Bob'),
-    tournament.getPlayer('Claude')
+    this.tournament.getPlayer('Anna'),
+    this.tournament.getPlayer('Bob'),
+    this.tournament.getPlayer('Claude')
   ];
-  var oddPlayer = tournament.getPlayer('Dennis');
-  var matrix = new SwissJS.MatchesMatrix(tournament, players, oddPlayer);
+  var oddPlayer = this.tournament.getPlayer('Dennis');
+  var matrix = new SwissJS.MatchesMatrix(this.tournament, players, oddPlayer);
   matrix.removePlayerMatches(oddPlayer);
 
   equal(matrix.possibilities.length, 2);
 });
 test("Get player matches", function () {
-  var tournament = getTestTournament();
-  tournament.addRound();
-  tournament.getRound().addMatch('Anna', 'Bob');
+  this.tournament.addRound();
+  this.tournament.getRound().addMatch('Anna', 'Bob');
   var players = [
-    tournament.getPlayer('Anna'),
-    tournament.getPlayer('Bob'),
-    tournament.getPlayer('Claude')
+    this.tournament.getPlayer('Anna'),
+    this.tournament.getPlayer('Bob'),
+    this.tournament.getPlayer('Claude')
   ];
-  var oddPlayer = tournament.getPlayer('Dennis');
-  var matrix = new SwissJS.MatchesMatrix(tournament, players, oddPlayer);
+  var oddPlayer = this.tournament.getPlayer('Dennis');
+  var matrix = new SwissJS.MatchesMatrix(this.tournament, players, oddPlayer);
   var matches = matrix.getPlayerMatches(oddPlayer);
 
   equal(matches.length, 3);
