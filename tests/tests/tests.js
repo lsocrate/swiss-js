@@ -132,9 +132,11 @@ test("Get player", function () {
   equal(player.points, 0);
 });
 
-module('Round', {setup: function () {
-  this.tournament = fillTournament(new SwissJS.Tournament());
-}});
+module('Round', {
+  setup: function () {
+    this.tournament = fillTournament(new SwissJS.Tournament());
+  }
+});
 test("New round", function () {
   this.tournament.addRound();
 
