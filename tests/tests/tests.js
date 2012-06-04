@@ -113,37 +113,6 @@ function getCompleteTournament(){
   return tournament;
 }
 
-function getNonSquareTournamentWith1stRound(){
-  var tournament = getTestTournament();
-  tournament.addPlayer('Irvine', 'Spider');
-  tournament.addPlayer('John', 'Spider');
-
-  tournament.rankPlayers();
-  tournament.addRound();
-  tournament.getRound().addMatch('Anna', 'Bob');
-  tournament.getMatch('Anna', 'Bob').reportWinner('Bob');
-  tournament.getRound().addMatch('Claude', 'Dennis');
-  tournament.getMatch('Claude', 'Dennis').reportWinner('Dennis');
-  tournament.getRound().addMatch('Eliot', 'Francis');
-  tournament.getMatch('Eliot', 'Francis').reportWinner('Francis');
-  tournament.getRound().addMatch('George', 'Henry');
-  tournament.getMatch('George', 'Henry').reportWinner('Henry');
-  tournament.getRound().addMatch('Irvine', 'John');
-  tournament.getMatch('Irvine', 'John').reportWinner('John');
-  // Bob     => 1-0
-  // Dennis  => 1-0
-  // Francis => 1-0
-  // Henry   => 1-0
-  // John    => 1-0
-  // Anna    => 0-0
-  // Claude  => 0-0
-  // Eliot   => 0-0
-  // George  => 0-0
-  // Irvine  => 0-0
-
-  return tournament;
-}
-
 module('Player', {
   setup: function () {
     this.tournament = new SwissJS.Tournament();
@@ -163,62 +132,70 @@ test("Get player", function () {
   equal(player.points, 0);
 });
 
-module('Round');
+module('Round', {setup: function () {
+  this.tournament = fillTournament(new SwissJS.Tournament());
+}});
 test("New round", function () {
-  var tournament = getTestTournament();
+  this.tournament.addRound();
 
-  tournament.addRound();
-
-  equal(tournament.rounds.length, 1);
+  equal(this.tournament.rounds.length, 1);
 });
 
 test("Get round", function () {
-  var tournament = getTestTournament();
+  this.tournament.addRound();
 
-  tournament.addRound();
-
-  ok(tournament.getRound(1));
+  ok(this.tournament.getRound(1));
 });
 
 test("Add match to round", function () {
-  var tournament = getTestTournament();
+  this.tournament.addRound();
+  this.tournament.getRound(1).addMatch('Anna', 'Bob');
 
-  tournament.addRound();
-  tournament.getRound(1).addMatch('Anna', 'Bob');
+  ok(this.tournament.getRound(1).matches['anna@bob']);
 
-  ok(tournament.getRound(1).matches['anna@bob']);
-
-  var result = tournament.getRound(1).addMatch('Anna', 'Johnny');
+  var result = this.tournament.getRound(1).addMatch('Anna', 'Johnny');
   ok(result.error);
 });
 
 test("Generate first round", function () {
-  var tournament = getTestTournament();
-  tournament.generateRound();
-  ok(tournament.getRound(1));
+  this.tournament.generateRound();
+  ok(this.tournament.getRound(1));
 });
 
 test("Generate other rounds", function () {
-  var tournament = getTestTournament();
+  this.tournament.generateRound();
+  autoPlayRound(this.tournament);
 
-  tournament.generateRound();
-  autoPlayRound(tournament);
+  this.tournament.generateRound();
+  autoPlayRound(this.tournament);
 
-  tournament.generateRound();
-  autoPlayRound(tournament);
+  this.tournament.generateRound();
+  autoPlayRound(this.tournament);
 
-  tournament.generateRound();
-  autoPlayRound(tournament);
+  this.tournament.rankPlayers();
 
-  tournament.rankPlayers();
-
-  ok((Object.keys(tournament.getRound(3)).length > 0));
+  ok((Object.keys(this.tournament.getRound(3)).length > 0));
 });
 test("Generate rounds with odd numbered tier", function () {
-  var tournament = getNonSquareTournamentWith1stRound();
-  tournament.generateRound();
+  this.tournament.addPlayer('Irvine', 'Spider');
+  this.tournament.addPlayer('John', 'Spider');
 
-  equal(Object.keys(tournament.getRound(2).matches).length, 5);
+  this.tournament.rankPlayers();
+  this.tournament.addRound();
+  this.tournament.getRound().addMatch('Anna', 'Bob');
+  this.tournament.getMatch('Anna', 'Bob').reportWinner('Bob');
+  this.tournament.getRound().addMatch('Claude', 'Dennis');
+  this.tournament.getMatch('Claude', 'Dennis').reportWinner('Dennis');
+  this.tournament.getRound().addMatch('Eliot', 'Francis');
+  this.tournament.getMatch('Eliot', 'Francis').reportWinner('Francis');
+  this.tournament.getRound().addMatch('George', 'Henry');
+  this.tournament.getMatch('George', 'Henry').reportWinner('Henry');
+  this.tournament.getRound().addMatch('Irvine', 'John');
+  this.tournament.getMatch('Irvine', 'John').reportWinner('John');
+
+  this.tournament.generateRound();
+
+  equal(Object.keys(this.tournament.getRound(2).matches).length, 5);
 });
 
 module('Matches');
