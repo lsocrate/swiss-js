@@ -1,3 +1,14 @@
+function fillTournament(tournament) {
+  return tournament.addPlayer('Anna', 'Crab')
+    .addPlayer('Bob', 'Crane')
+    .addPlayer('Claude', 'Dragon')
+    .addPlayer('Dennis', 'Lion')
+    .addPlayer('Eliot', 'Mantis')
+    .addPlayer('Francis', 'Phoenix')
+    .addPlayer('George', 'Scorpion')
+    .addPlayer('Henry', 'Spider');
+}
+
 function getTestTournament() {
   return new SwissJS.Tournament()
     .addPlayer('Anna', 'Crab')
@@ -133,17 +144,19 @@ function getNonSquareTournamentWith1stRound(){
   return tournament;
 }
 
-module('Player');
+module('Player', {
+  setup: function () {
+    this.tournament = new SwissJS.Tournament();
+  }
+});
 test("Add player", function () {
-  var tournament = new SwissJS.Tournament();
-
-  tournament.addPlayer('Anna', 'Scorpion');
-  equal(tournament.players.length, 1);
+  this.tournament.addPlayer('Anna', 'Scorpion');
+  equal(this.tournament.players.length, 1);
 });
 
 test("Get player", function () {
-  var tournament = getTestTournament();
-  var player = tournament.getPlayer('Anna');
+  fillTournament(this.tournament);
+  var player = this.tournament.getPlayer('Anna');
 
   equal(player.name, 'Anna');
   equal(player.clan, 'crab');
