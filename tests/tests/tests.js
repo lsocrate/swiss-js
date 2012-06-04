@@ -40,7 +40,7 @@ function autoPlayRound(tournament) {
 function getCompleteTournament(){
   var tournament = getTestTournament();
 
-  tournament.updateRanking();
+  tournament.rankPlayers();
   tournament.addRound();
   tournament.getRound().addMatch('Anna', 'Bob');
   tournament.getMatch('Anna', 'Bob').reportWinner('Bob');
@@ -59,7 +59,7 @@ function getCompleteTournament(){
   // Eliot   => 0-0
   // George  => 0-0
 
-  tournament.updateRanking();
+  tournament.rankPlayers();
   tournament.addRound();
   tournament.getRound().addMatch('Bob', 'Dennis');
   tournament.getMatch('Bob', 'Dennis').reportWinner('Dennis');
@@ -78,7 +78,7 @@ function getCompleteTournament(){
   // Anna    => 0-0
   // Eliot   => 0-0
 
-  tournament.updateRanking();
+  tournament.rankPlayers();
   tournament.addRound();
   tournament.getRound().addMatch('Henry', 'Dennis');
   tournament.getMatch('Henry', 'Dennis').reportWinner('Henry');
@@ -97,7 +97,7 @@ function getCompleteTournament(){
   // Eliot   => 1-0 = [points 1][ms from victories 0][ms total = 3]
   // Anna    => 0-0 = [points 0][ms from victories 0][ms total = 4]
 
-  tournament.updateRanking();
+  tournament.rankPlayers();
 
   return tournament;
 }
@@ -107,7 +107,7 @@ function getNonSquareTournamentWith1stRound(){
   tournament.addPlayer('Irvine', 'Spider');
   tournament.addPlayer('John', 'Spider');
 
-  tournament.updateRanking();
+  tournament.rankPlayers();
   tournament.addRound();
   tournament.getRound().addMatch('Anna', 'Bob');
   tournament.getMatch('Anna', 'Bob').reportWinner('Bob');
@@ -197,7 +197,7 @@ test("Generate other rounds", function () {
   tournament.generateRound();
   autoPlayRound(tournament);
 
-  tournament.updateRanking();
+  tournament.rankPlayers();
 
   ok((Object.keys(tournament.getRound(3)).length > 0));
 });
@@ -307,7 +307,7 @@ test("Rank players", function () {
   tournament.getMatch('Eliot', 'Francis').reportWinner('Eliot');
   tournament.getMatch('George', 'Henry').reportWinner('George');
 
-  tournament.updateRanking();
+  tournament.rankPlayers();
   var annaPosition = tournament.getPlayer('Anna').getPosition();
   var isAnnaTopHalf = ((annaPosition > 0) && (annaPosition < 5));
 

@@ -122,20 +122,19 @@ SwissJS.Tournament.prototype.getMatch = function (player1Name, player2Name) {
     };
   }
 };
-SwissJS.Tournament.prototype.simpleRank = function (a, b) {
-  return b.points - a.points;
-};
-SwissJS.Tournament.prototype.completeRank = function (a, b) {
-  if (b.points !== a.points) {
-    return b.points - a.points;
-  } else if(b.msW !== a.msW) {
-    return b.msW - a.msW;
-  } else {
-    return b.msL - a.msL;
-  }
-};
-SwissJS.Tournament.prototype.updateFinalRanking = function() {
-  this.players.sort(this.completeRank);
+SwissJS.Tournament.prototype.rankPlayers = function () {
+  this.players.sort(function (a, b) {
+    if (b.points !== a.points) {
+      return b.points - a.points;
+    } else if(b.msW !== a.msW) {
+      return b.msW - a.msW;
+    } else if(b.msL !== a.msL) {
+      return b.msL - a.msL;
+    } else {
+      return 0;
+    }
+  });
+  $(this).trigger('rankUpdated');
 };
 SwissJS.Tournament.prototype.getPlayersByPointsGroup = function () {
   var groups = [];
@@ -166,23 +165,18 @@ SwissJS.Tournament.prototype.addRound = function () {
   $(this).trigger('roundAdded');
 };
 SwissJS.Tournament.prototype.end = function () {
-  this.updateRanking();
+  this.rankPlayers();
 
   for (var i = 0; i < this.players.length; i++) {
     var player = this.players[i];
     player.calculateMs();
   };
 
-  this.updateFinalRanking();
+  this.rankPlayers();
   $(this).trigger('tournamentEnded');
 
   return this;
 };
-SwissJS.Tournament.prototype.updateRanking = function () {
-  this.players.sort(this.simpleRank);
-  $(this).trigger('rankUpdated');
-};
-
 
 SwissJS.MatchesMatrix = function (tournament, playerCollection, oddPlayer) {
   this.tournament    = tournament;
@@ -217,7 +211,7 @@ SwissJS.MatchesMatrix.prototype.getPlayerMatches = function (player) {
   });
 };
 SwissJS.Tournament.prototype.generateRound = function () {
-  this.updateRanking();
+  this.rankPlayers();
   this.addRound();
 
   var groupsToMatch = this.getPlayersByPointsGroup();
