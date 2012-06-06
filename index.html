@@ -21,18 +21,32 @@
       <button class="js-button" data-action="startRound">Start round</button>
       <button class="js-button" data-action="endTournament">End tournament</button>
     </nav>
-    <table class="ranking">
-      <tr class="ranking-header">
-        <th class="ranking-header ranking-player">Player</th>
-        <th class="ranking-header ranking-clan">Clan</th>
-        <th class="ranking-header ranking-points">Points</th>
-      </tr>
-      <tr class="ranking-row" data-player-id="">
-        <td class="ranking-header ranking-player" data-attribute="name"></td>
-        <td class="ranking-header ranking-clan" data-attribute="clan"></td>
-        <td class="ranking-header ranking-points" data-attribute="points"></td>
-      </tr>
-    </table>
+    <div class="tab ranking">
+      <table class="ranking">
+        <tr class="ranking-header">
+          <th class="ranking-header ranking-player">Player</th>
+          <th class="ranking-header ranking-clan">Clan</th>
+          <th class="ranking-header ranking-points">Points</th>
+        </tr>
+        <tr class="ranking-row" data-player-id="">
+          <td class="ranking-header ranking-player" data-attribute="name"></td>
+          <td class="ranking-header ranking-clan" data-attribute="clan"></td>
+          <td class="ranking-header ranking-points" data-attribute="points"></td>
+        </tr>
+      </table>
+    </div>
+    <div class="tab round">
+      <table class="round">
+        <tr class="round-header">
+          <th class="round-header round-player">Player 1</th>
+          <th class="round-header round-player">Player 2</th>
+        </tr>
+        <tr class="round-row" data-player-id="">
+          <td class="round-player"></td>
+          <td class="round-player"></td>
+        </tr>
+      </table>
+    </div>
     <script src="js/bootstrap.js"></script>
   </body>
 </html>
