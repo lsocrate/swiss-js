@@ -27,8 +27,12 @@ function autoPlayRound(tournament) {
   var round = tournament.getRound();
   for(var match in round.matches) {
     if(round.matches.hasOwnProperty(match)) {
+      var players = [
+        round.matches[match].players[0].name,
+        round.matches[match].players[1].name
+      ];
 
-      round.matches[match].reportWinner(round.matches[match].players.sort()[1]);
+      round.matches[match].reportWinner(players.sort()[1]);
     }
   }
 
@@ -164,7 +168,6 @@ test("Generate other rounds", function () {
   autoPlayRound(this.tournament);
 
   this.tournament.rankPlayers();
-
   ok((Object.keys(this.tournament.getRound(3)).length > 0));
 });
 test("Generate rounds with odd numbered tier", function () {
@@ -210,7 +213,9 @@ test("Make match name", function () {
 
 test("Get match", function () {
   var match = this.tournament2.getMatch('Claude', 'Dennis');
-  deepEqual(match.players, ['Claude', 'Dennis']);
+
+  equal(match.players[0].name, 'Claude');
+  equal(match.players[1].name, 'Dennis');
   equal(match.name, 'claude@dennis');
   equal(match.winner, undefined);
   equal(match.isDone, false);
@@ -219,7 +224,10 @@ test("Get match", function () {
 test("Report match result", function () {
   var match = this.tournament2.getMatch('Claude', 'Dennis');
   match.reportWinner('Dennis');
-  equal(match.winner, 'Dennis');
+
+  equal(match.winner.name, 'Dennis');
+  equal(this.tournament2.getPlayer('Claude').points, 0);
+  equal(this.tournament2.getPlayer('Dennis').points, 1);
   equal(match.isDone, true);
 
   var match2 = this.tournament2.getMatch('Eliot', 'Francis');
@@ -281,26 +289,6 @@ test("Get player matches", function () {
 });
 
 module('Ranking');
-test("Rank players", function () {
-  var tournament = getTestRound1();
-
-  tournament.getMatch('Anna', 'Bob').reportWinner('Anna');
-  tournament.getMatch('Claude', 'Dennis').reportWinner('Claude');
-  tournament.getMatch('Eliot', 'Francis').reportWinner('Eliot');
-  tournament.getMatch('George', 'Henry').reportWinner('George');
-
-  tournament.rankPlayers();
-  var annaPosition = tournament.getPlayer('Anna').getPosition();
-  var isAnnaTopHalf = ((annaPosition > 0) && (annaPosition < 5));
-
-  ok(isAnnaTopHalf);
-
-  var bobPosition = tournament.getPlayer('Bob').getPosition();
-  var isBobBottomHalf = (bobPosition > 4);
-
-  ok(isBobBottomHalf);
-});
-
 test("Rank players with ms", function () {
   var tournament = getCompleteTournament();
   tournament.end();
@@ -313,4 +301,5 @@ test("Rank players with ms", function () {
   equal(tournament.getPlayer('Bob').getPosition(), 6);
   equal(tournament.getPlayer('Eliot').getPosition(), 7);
   equal(tournament.getPlayer('Anna').getPosition(), 8);
+  console.log(tournament);
 });

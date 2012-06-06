@@ -38,21 +38,21 @@ SwissJS.Match = function (tournament) {
   this.tournament = tournament;
   this.name       = undefined;
   this.players    = [
-    arguments[1].name,
-    arguments[2].name
+    arguments[1],
+    arguments[2]
   ];
   this.winner     = undefined;
   this.isDone     = false;
-  this.name       = this.tournament.makeMatchName(this.tournament.getPlayer(this.players[0]), this.tournament.getPlayer(this.players[1]));
+  this.name       = this.tournament.makeMatchName(this.players[0], this.players[1]);
 
   arguments[1].opponents.push(arguments[2].name);
   arguments[2].opponents.push(arguments[1].name);
 };
 SwissJS.Match.prototype.reportWinner = function(winnerName) {
-  this.winner = winnerName;
+  this.winner = this.tournament.getPlayer(winnerName);
   this.isDone = true;
 
-  this.tournament.getPlayer(winnerName).points++;
+  this.winner.points++;
   $(this.tournament).trigger('matchReported');
 };
 
@@ -71,9 +71,9 @@ SwissJS.Round.prototype.addMatch = function (player1Name, player2Name) {
   var player2 = this.tournament.getPlayer(player2Name);
 
   if (player1 && player2) {
-    var matchName = this.tournament.makeMatchName(player1, player2);
+    var match = new SwissJS.Match(this.tournament, player1, player2);
 
-    this.matches[matchName] = new SwissJS.Match(this.tournament, player1, player2);
+    this.matches[match.name] = match;
   } else {
     return {error:true};
   }
