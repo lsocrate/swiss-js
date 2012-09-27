@@ -23,15 +23,13 @@ SwissJS.Player.prototype.getPosition = function () {
   };
 };
 SwissJS.Player.prototype.calculateMs = function () {
-  for (var i = 0; i < this.opponents.length; i++) {
-    var opponentName = this.opponents[i];
-
+  this.opponents.forEach(function(opponentName){
     if (this.tournament.getMatch(opponentName, this.name).winner === this.name) {
       this.msW += this.tournament.getPlayer(opponentName).points;
     } else {
       this.msL += this.tournament.getPlayer(opponentName).points;
     }
-  };
+  }, this);
 };
 
 SwissJS.Match = function (tournament) {
@@ -139,14 +137,13 @@ SwissJS.Tournament.prototype.rankPlayers = function () {
 SwissJS.Tournament.prototype.getPlayersByPointsGroup = function () {
   var groups = [];
 
-  for (var i = 0; i < this.players.length; i++) {
-    var player = this.players[i];
+  this.players.forEach(function(player){
     if (typeof groups[player.points] === 'undefined') {
       groups[player.points] = [player];
     } else {
       groups[player.points].push(player);
     }
-  };
+  });
 
   return groups;
 };
@@ -167,10 +164,9 @@ SwissJS.Tournament.prototype.addRound = function () {
 SwissJS.Tournament.prototype.end = function () {
   this.rankPlayers();
 
-  for (var i = 0; i < this.players.length; i++) {
-    var player = this.players[i];
+  this.players.forEach(function(player){
     player.calculateMs();
-  };
+  });
 
   this.rankPlayers();
   $(this).trigger('tournamentEnded');
@@ -188,16 +184,13 @@ SwissJS.MatchesMatrix = function (tournament, playerCollection, oddPlayer) {
     this.players.push(oddPlayer);
   }
 
-  while (this.players.length > 1) {
-    var player1 = this.players.pop();
-
-    for (var i = 0; i < this.players.length; i++) {
-      var player2 = this.players[i];
-
+  var player1;
+  while (player1 = this.players.shift()) {
+    this.players.forEach(function(player2){
       if (!this.tournament.getMatch(player1.name, player2.name)) {
         this.possibilities.push([player1, player2]);
       }
-    };
+    }, this);
   }
 };
 SwissJS.MatchesMatrix.prototype.removePlayerMatches = function (player) {
@@ -216,9 +209,9 @@ SwissJS.Tournament.prototype.generateRound = function () {
 
   var groupsToMatch = this.getPlayersByPointsGroup();
   var oddPlayer = false;
-  for (var i = groupsToMatch.length - 1; i >= 0; i--) {
-    var group = groupsToMatch[i];
 
+  var group;
+  while (group = groupsToMatch.pop()) {
     while(group.length > 1) {
       var player1, player2;
 
