@@ -223,6 +223,11 @@ SwissJS.Tournament.prototype.generateRound = function () {
       }
 
       player2 = group.popRandom();
+      while (player1.opponents.indexOf(player2.name) > -1) {
+        var failedPlayer2 = player2;
+        player2 = group.popRandom();
+        group.push(failedPlayer2);
+      }
 
       this.getRound().addMatch(player1.name, player2.name);
     }

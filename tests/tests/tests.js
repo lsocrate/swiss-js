@@ -301,5 +301,4 @@ test("Rank players with ms", function () {
   equal(tournament.getPlayer('Bob').getPosition(), 6);
   equal(tournament.getPlayer('Eliot').getPosition(), 7);
   equal(tournament.getPlayer('Anna').getPosition(), 8);
-  console.log(tournament);
 });
