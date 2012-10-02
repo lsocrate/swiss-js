@@ -77,7 +77,7 @@ var SwissJS;
       var player2 = this.tournament.getPlayer(player2Name);
 
       if (player1 && player2) {
-        var match = new SwissJS.Match(this.tournament, player1, player2);
+        var match = new Match(this.tournament, player1, player2);
 
         this.matches[match.name] = match;
       } else {
@@ -225,8 +225,5 @@ var SwissJS;
     return Tournament;
   })();
 
-  SwissJS.Player = Player;
-  SwissJS.Match = Match;
-  SwissJS.Round = Round;
   SwissJS.Tournament = Tournament;
 })(SwissJS || (SwissJS = {}));
