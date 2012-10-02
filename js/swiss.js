@@ -174,35 +174,6 @@ SwissJS.Tournament.prototype.end = function () {
   return this;
 };
 
-SwissJS.MatchesMatrix = function (tournament, playerCollection, oddPlayer) {
-  this.tournament    = tournament;
-  this.players       = playerCollection;
-  this.possibilities = [];
-
-  if (oddPlayer) {
-    this.oddPlayer = oddPlayer;
-    this.players.push(oddPlayer);
-  }
-
-  var player1;
-  while (player1 = this.players.shift()) {
-    this.players.forEach(function(player2){
-      if (!this.tournament.getMatch(player1.name, player2.name)) {
-        this.possibilities.push([player1, player2]);
-      }
-    }, this);
-  }
-};
-SwissJS.MatchesMatrix.prototype.removePlayerMatches = function (player) {
-  this.possibilities = this.possibilities.filter(function (match) {
-    return !(match[0].id === player.id || match[1].id === player.id);
-  });
-};
-SwissJS.MatchesMatrix.prototype.getPlayerMatches = function (player) {
-  return this.possibilities.filter(function (match) {
-    return (match[0].id === player.id || match[1].id === player.id);
-  });
-};
 SwissJS.Tournament.prototype.generateRound = function () {
   this.rankPlayers();
   this.addRound();
