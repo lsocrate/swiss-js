@@ -235,6 +235,58 @@ test("Report match result", function () {
   equal(match2.winner, undefined);
   equal(match2.isDone, true);
 });
+test("Generate possible matches matrix", function () {
+  var players = [
+    this.tournament.getPlayer('Anna'),
+    this.tournament.getPlayer('Bob'),
+    this.tournament.getPlayer('Claude'),
+    this.tournament.getPlayer('Dennis')
+  ];
+  var matrix = new SwissJS.MatchesMatrix(this.tournament, players);
+
+  equal(matrix.possibilities.length, 6);
+});
+test("Generate possible matches matrix with repeated and oddPlayer", function () {
+  this.tournament.addRound();
+  this.tournament.getRound().addMatch('Anna', 'Bob');
+  var players = [
+    this.tournament.getPlayer('Anna'),
+    this.tournament.getPlayer('Bob'),
+    this.tournament.getPlayer('Claude')
+  ];
+  var oddPlayer = this.tournament.getPlayer('Dennis');
+  var matrix = new SwissJS.MatchesMatrix(this.tournament, players, oddPlayer);
+
+  equal(matrix.possibilities.length, 5);
+});
+test("Remove player matches", function () {
+  this.tournament.addRound();
+  this.tournament.getRound().addMatch('Anna', 'Bob');
+  var players = [
+    this.tournament.getPlayer('Anna'),
+    this.tournament.getPlayer('Bob'),
+    this.tournament.getPlayer('Claude')
+  ];
+  var oddPlayer = this.tournament.getPlayer('Dennis');
+  var matrix = new SwissJS.MatchesMatrix(this.tournament, players, oddPlayer);
+  matrix.removePlayerMatches(oddPlayer);
+
+  equal(matrix.possibilities.length, 2);
+});
+test("Get player matches", function () {
+  this.tournament.addRound();
+  this.tournament.getRound().addMatch('Anna', 'Bob');
+  var players = [
+    this.tournament.getPlayer('Anna'),
+    this.tournament.getPlayer('Bob'),
+    this.tournament.getPlayer('Claude')
+  ];
+  var oddPlayer = this.tournament.getPlayer('Dennis');
+  var matrix = new SwissJS.MatchesMatrix(this.tournament, players, oddPlayer);
+  var matches = matrix.getPlayerMatches(oddPlayer);
+
+  equal(matches.length, 3);
+});
 
 module('Ranking');
 test("Rank players with ms", function () {
