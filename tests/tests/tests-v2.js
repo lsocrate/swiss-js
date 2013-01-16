@@ -9,6 +9,7 @@ test("Add player", function () {
 });
 test("Get player", function () {
   this.tournament.addPlayer('Anna', 'Scorpion')
+    this.tournament.addPlayer('Bob', 'Crane')
 
   var player = this.tournament.getPlayer(1)
   ok(player)
