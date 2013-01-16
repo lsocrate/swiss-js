@@ -207,8 +207,8 @@ test("Make match name", function () {
   var anna = this.tournament.getPlayer('Anna');
   var bob = this.tournament.getPlayer('Bob');
 
-  equal(this.tournament.makeMatchName(anna, bob), 'anna@bob');
-  equal(this.tournament.makeMatchName(bob, anna), 'anna@bob');
+  equal(SwissJS.makeMatchName(anna, bob), 'anna@bob');
+  equal(SwissJS.makeMatchName(bob, anna), 'anna@bob');
 });
 
 test("Get match", function () {
