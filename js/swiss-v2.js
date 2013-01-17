@@ -40,6 +40,25 @@ SwissTournament = function() {
     this.winner.opponents[opponent.id] = opponent
     this.loser.opponents[winner.id] = winner
   };
+  Match.prototype.reportDoubleLoss = function() {
+    var player1
+    var player2
+    for(var player in this.players) {
+      if (this.players.hasOwnProperty(player)) {
+        if (!player1) {
+          player1 = this.players[player]
+        } else {
+          player2 = this.players[player]
+        }
+      }
+    }
+
+    this.drawed = true
+    this.losers = [player1, player2]
+
+    player1.opponents[player2.id] = player2
+    player2.opponents[player1.id] = player1
+  };
 
   this.addPlayer = function (name, clan) {
     var player = new Player(name, clan)

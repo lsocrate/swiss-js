@@ -81,3 +81,17 @@ test("Report match victory", function () {
   ok(match.winner.opponents["p2"])
   ok(match.loser.opponents["p1"])
 })
+test("Report double loss", function () {
+  this.tournament.addMatch("p1", "p2")
+  var match = this.tournament.getMatch("p1", "p2")
+  var player1 = this.tournament.getPlayer("p1")
+  var player2 = this.tournament.getPlayer("p2")
+
+  match.reportDoubleLoss()
+  equal(0, player1.points)
+  equal(0, player2.points)
+  equal(2, match.losers.length)
+  ok(match.drawed)
+  ok(player1.opponents["p2"])
+  ok(player2.opponents["p1"])
+})
