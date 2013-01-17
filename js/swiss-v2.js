@@ -76,6 +76,7 @@ SwissTournament = function() {
   };
 
   var MatchMatrix = function (players) {
+    this.matches = {}
     this.matrix = {}
 
     var player1
@@ -85,11 +86,30 @@ SwissTournament = function() {
         var match = new Match(player1, player2)
 
         if (!tournament.matches[match.id]) {
-          this.matrix[match.id] = match
+          this.matches[match.id] = match
+
+          if (!this.matrix[player1.id]) this.matrix[player1.id] = {}
+          this.matrix[player1.id][player2.id] = match
+
+          if (!this.matrix[player2.id]) this.matrix[player2.id] = {}
+          this.matrix[player2.id][player1.id] = match
         }
       };
     }
   }
+  MatchMatrix.prototype.getSingularMatches = function() {
+    var matches = {}
+    this.matrix.forEach(function (playerId, opponents) {
+      if (opponents.size() < 2) {
+        opponents.forEach(function (opponentId, match) {
+          matches[match.id] = match
+        })
+      }
+    })
+
+    return matches
+  };
+
   this.addPlayer = function (name, clan) {
     var player = new Player(name, clan)
 
