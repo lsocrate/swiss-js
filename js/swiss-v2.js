@@ -34,6 +34,8 @@ SwissTournament = function() {
 
     this.winner = winner
     this.loser = opponent
+
+    this.winner.points++
   };
 
   this.addPlayer = function (name, clan) {
