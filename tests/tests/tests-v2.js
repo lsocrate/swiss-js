@@ -39,3 +39,12 @@ test("Get match", function () {
   var match = this.tournament.getMatch(1, 2)
   ok(match.players)
 });
+test("Get player matches", function () {
+  this.tournament.addMatch(1, 2)
+  this.tournament.addMatch(1, 3)
+  this.tournament.addMatch(1, 4)
+  var matches = this.tournament.getPlayerMatches(this.tournament.getPlayer(1))
+  ok(matches["m1@2"])
+  ok(matches["m1@3"])
+  ok(matches["m1@4"])
+});

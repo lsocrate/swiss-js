@@ -43,4 +43,17 @@ SwissTournament = function() {
   this.getMatch = function (playerId1, playerId2) {
     return this.matches[makeMatchName(playerId1, playerId2)]
   }
+  this.getPlayerMatches = function (player) {
+    var playerMatches = {}
+    for (var matchName in this.matches) {
+      if (this.matches.hasOwnProperty(matchName)) {
+        var match = this.matches[matchName]
+        if (match.players["id" + player.id]) {
+          playerMatches[matchName] = match
+        }
+      }
+    }
+
+    return playerMatches
+  }
 }
