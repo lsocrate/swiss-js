@@ -24,6 +24,17 @@ SwissTournament = function() {
     this.players["id" + player1.id] = player1
     this.players["id" + player2.id] = player2
   }
+  Match.prototype.reportWinner = function(winner) {
+    var opponent
+    for(var player in this.players) {
+      if (this.players.hasOwnProperty(player) && this.players[player].id != winner.id) {
+        opponent = this.players[player]
+      }
+    }
+
+    this.winner = winner
+    this.loser = opponent
+  };
 
   this.addPlayer = function (name, clan) {
     var player = new Player(name, clan)

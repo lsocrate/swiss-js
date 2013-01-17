@@ -69,3 +69,11 @@ test("Get match matrix", function () {
   ok(matrix["m3@5"])
   ok(matrix["m4@5"])
 })
+test("Report match victory", function () {
+  this.tournament.addMatch(1, 2)
+  var match = this.tournament.getMatch(1, 2)
+  var winner = this.tournament.getPlayer(1)
+  match.reportWinner(winner)
+  equal(1, match.winner.id)
+  equal(2, match.loser.id)
+})
