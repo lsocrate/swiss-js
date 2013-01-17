@@ -1,6 +1,6 @@
 module('Player', {
   setup: function () {
-    this.tournament = new SwissTournament();
+    this.tournament = new SwissTournament()
   }
 })
 test("Add player", function () {
@@ -17,7 +17,7 @@ test("Get player", function () {
 
 module('Matches', {
   setup: function () {
-    this.tournament = new SwissTournament();
+    this.tournament = new SwissTournament()
     this.tournament.addPlayer('Anna', 'Crab')
     this.tournament.addPlayer('Bob', 'Crane')
     this.tournament.addPlayer('Claude', 'Dragon')
@@ -25,9 +25,9 @@ module('Matches', {
     this.tournament.addPlayer('Eliot', 'Mantis')
     this.tournament.addPlayer('Francis', 'Phoenix')
     this.tournament.addPlayer('George', 'Scorpion')
-    this.tournament.addPlayer('Henry', 'Spider');
-    this.tournament.addPlayer('Irvine', 'Unaligned');
-    this.tournament.addPlayer('Juliet', 'Unaligned');
+    this.tournament.addPlayer('Henry', 'Spider')
+    this.tournament.addPlayer('Irvine', 'Unaligned')
+    this.tournament.addPlayer('Juliet', 'Unaligned')
   }
 })
 test("Add match", function () {
@@ -47,29 +47,6 @@ test("Get player matches", function () {
   ok(matches["mp1@p2"])
   ok(matches["mp1@p3"])
   ok(matches["mp1@p4"])
-})
-test("Get match matrix", function () {
-  var players = [
-    this.tournament.getPlayer("p1"),
-    this.tournament.getPlayer("p2"),
-    this.tournament.getPlayer("p3"),
-    this.tournament.getPlayer("p4"),
-    this.tournament.getPlayer("p5")
-  ]
-
-  this.tournament.addMatch("p1", "p2")
-
-  var matrix = this.tournament.getMatchMatrixForPlayers(players)
-  equal(9, matrix.size())
-  ok(matrix["mp1@p3"])
-  ok(matrix["mp1@p4"])
-  ok(matrix["mp1@p5"])
-  ok(matrix["mp2@p3"])
-  ok(matrix["mp2@p4"])
-  ok(matrix["mp2@p5"])
-  ok(matrix["mp3@p4"])
-  ok(matrix["mp3@p5"])
-  ok(matrix["mp4@p5"])
 })
 test("Report match victory", function () {
   this.tournament.addMatch("p1", "p2")
@@ -96,4 +73,43 @@ test("Report double loss", function () {
   ok(match.drawed)
   ok(player1.opponents["p2"])
   ok(player2.opponents["p1"])
+})
+
+module('Match Matrix', {
+  setup: function () {
+    this.tournament = new SwissTournament()
+    this.tournament.addPlayer('Anna', 'Crab')
+    this.tournament.addPlayer('Bob', 'Crane')
+    this.tournament.addPlayer('Claude', 'Dragon')
+    this.tournament.addPlayer('Dennis', 'Lion')
+    this.tournament.addPlayer('Eliot', 'Mantis')
+    this.tournament.addPlayer('Francis', 'Phoenix')
+    this.tournament.addPlayer('George', 'Scorpion')
+    this.tournament.addPlayer('Henry', 'Spider')
+    this.tournament.addPlayer('Irvine', 'Unaligned')
+    this.tournament.addPlayer('Juliet', 'Unaligned')
+
+    this.players = [
+      this.tournament.getPlayer("p1"),
+      this.tournament.getPlayer("p2"),
+      this.tournament.getPlayer("p3"),
+      this.tournament.getPlayer("p4"),
+      this.tournament.getPlayer("p5")
+    ]
+  }
+})
+test("Get match matrix", function () {
+  this.tournament.addMatch("p1", "p2")
+
+  var matrix = this.tournament.getMatchMatrixForPlayers(this.players)
+  equal(9, matrix.size())
+  ok(matrix["mp1@p3"])
+  ok(matrix["mp1@p4"])
+  ok(matrix["mp1@p5"])
+  ok(matrix["mp2@p3"])
+  ok(matrix["mp2@p4"])
+  ok(matrix["mp2@p5"])
+  ok(matrix["mp3@p4"])
+  ok(matrix["mp3@p5"])
+  ok(matrix["mp4@p5"])
 })
