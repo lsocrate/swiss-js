@@ -5,6 +5,13 @@ Object.prototype.forEach = function(callback) {
     }
   }
 };
+Object.prototype.size = function() {
+    var size = 0, key;
+    for (key in this) {
+        if (this.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
 
 var SwissTournament = SwissTournament || {}
 
@@ -31,6 +38,7 @@ SwissTournament = function() {
     this.players = {}
     this.players[player1.id] = player1
     this.players[player2.id] = player2
+    this.id = makeMatchName(player1.id, player2.id)
   }
   Match.prototype.reportWinner = function(winner) {
     var opponent
@@ -79,7 +87,7 @@ SwissTournament = function() {
     var player2 = this.getPlayer(playerId2)
     var match = new Match(player1, player2)
 
-    this.matches[makeMatchName(playerId1, playerId2)] = match
+    this.matches[match.id] = match
   }
   this.getMatch = function (playerId1, playerId2) {
     return this.matches[makeMatchName(playerId1, playerId2)]
@@ -102,7 +110,9 @@ SwissTournament = function() {
         var player2 = players[i]
         var match = new Match(player1, player2)
 
-        matrix[makeMatchName(player1.id, player2.id)] = match
+        if (!this.matches[match.id]) {
+          matrix[match.id] = match
+        }
       };
     }
 

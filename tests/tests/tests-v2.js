@@ -57,8 +57,10 @@ test("Get match matrix", function () {
     this.tournament.getPlayer("p5")
   ]
 
+  this.tournament.addMatch("p1", "p2")
+
   var matrix = this.tournament.getMatchMatrixForPlayers(players)
-  ok(matrix["mp1@p2"])
+  equal(9, matrix.size())
   ok(matrix["mp1@p3"])
   ok(matrix["mp1@p4"])
   ok(matrix["mp1@p5"])
