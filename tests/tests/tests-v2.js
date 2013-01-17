@@ -78,4 +78,6 @@ test("Report match victory", function () {
   equal(2, match.loser.id)
   equal(1, match.winner.points)
   equal(0, match.loser.points)
+  ok(match.winner.opponents["id2"])
+  ok(match.loser.opponents["id1"])
 })
