@@ -9,7 +9,7 @@ test("Add player", function () {
 });
 test("Get player", function () {
   this.tournament.addPlayer('Anna', 'Scorpion')
-    this.tournament.addPlayer('Bob', 'Crane')
+  this.tournament.addPlayer('Bob', 'Crane')
 
   var player = this.tournament.getPlayer(1)
   ok(player)
@@ -33,4 +33,9 @@ module('Matches', {
 test("Add match", function () {
   this.tournament.addMatch(1, 2)
   ok(this.tournament.matches["m1@2"])
+});
+test("Get match", function () {
+  this.tournament.addMatch(1, 2)
+  var match = this.tournament.getMatch(1, 2)
+  ok(match.players)
 });

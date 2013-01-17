@@ -40,4 +40,7 @@ SwissTournament = function() {
 
     this.matches[makeMatchName(playerId1, playerId2)] = match
   }
+  this.getMatch = function (playerId1, playerId2) {
+    return this.matches[makeMatchName(playerId1, playerId2)]
+  }
 }
