@@ -56,4 +56,18 @@ SwissTournament = function() {
 
     return playerMatches
   }
+  this.getMatchMatrixForPlayers = function (players) {
+    var matrix = {}
+    var player1
+    while (player1 = players.shift()) {
+      for (var i = 0; i < players.length; i++) {
+        var player2 = players[i]
+        var match = new Match(player1, player2)
+
+        matrix[makeMatchName(player1.id, player2.id)] = match
+      };
+    }
+
+    return matrix
+  }
 }

@@ -48,3 +48,24 @@ test("Get player matches", function () {
   ok(matches["m1@3"])
   ok(matches["m1@4"])
 })
+test("Get match matrix", function () {
+  var players = [
+    this.tournament.getPlayer(1),
+    this.tournament.getPlayer(2),
+    this.tournament.getPlayer(3),
+    this.tournament.getPlayer(4),
+    this.tournament.getPlayer(5)
+  ]
+
+  var matrix = this.tournament.getMatchMatrixForPlayers(players)
+  ok(matrix["m1@2"])
+  ok(matrix["m1@3"])
+  ok(matrix["m1@4"])
+  ok(matrix["m1@5"])
+  ok(matrix["m2@3"])
+  ok(matrix["m2@4"])
+  ok(matrix["m2@5"])
+  ok(matrix["m3@4"])
+  ok(matrix["m3@5"])
+  ok(matrix["m4@5"])
+})
