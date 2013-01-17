@@ -6,7 +6,7 @@ SwissTournament = function() {
   this.matches = {}
 
   var nextPlayerId = function () {
-    return ++playerCount
+    return "p" + ++playerCount
   }
   var makeMatchName = function (id1, id2) {
     return "m" + id1 + "@" + id2
@@ -21,8 +21,8 @@ SwissTournament = function() {
   }
   var Match = function (player1, player2) {
     this.players = {}
-    this.players["id" + player1.id] = player1
-    this.players["id" + player2.id] = player2
+    this.players[player1.id] = player1
+    this.players[player2.id] = player2
   }
   Match.prototype.reportWinner = function(winner) {
     var opponent
@@ -37,17 +37,17 @@ SwissTournament = function() {
 
     this.winner.points++
 
-    this.winner.opponents["id" + opponent.id] = opponent
-    this.loser.opponents["id" + winner.id] = winner
+    this.winner.opponents[opponent.id] = opponent
+    this.loser.opponents[winner.id] = winner
   };
 
   this.addPlayer = function (name, clan) {
     var player = new Player(name, clan)
 
-    this.players["id" + player.id] = player
+    this.players[player.id] = player
   }
   this.getPlayer = function (id) {
-    return this.players["id" + id]
+    return this.players[id]
   }
   this.addMatch = function (playerId1, playerId2) {
     var player1 = this.getPlayer(playerId1)
@@ -64,7 +64,7 @@ SwissTournament = function() {
     for (var matchName in this.matches) {
       if (this.matches.hasOwnProperty(matchName)) {
         var match = this.matches[matchName]
-        if (match.players["id" + player.id]) {
+        if (match.players[player.id]) {
           playerMatches[matchName] = match
         }
       }

@@ -5,13 +5,13 @@ module('Player', {
 })
 test("Add player", function () {
   this.tournament.addPlayer('Anna', 'Scorpion')
-  ok(this.tournament.players.id1)
+  ok(this.tournament.players.p1)
 })
 test("Get player", function () {
   this.tournament.addPlayer('Anna', 'Scorpion')
   this.tournament.addPlayer('Bob', 'Crane')
 
-  var player = this.tournament.getPlayer(1)
+  var player = this.tournament.getPlayer("p1")
   ok(player)
 })
 
@@ -31,53 +31,53 @@ module('Matches', {
   }
 })
 test("Add match", function () {
-  this.tournament.addMatch(1, 2)
-  ok(this.tournament.matches["m1@2"])
+  this.tournament.addMatch("p1", "p2")
+  ok(this.tournament.matches["mp1@p2"])
 })
 test("Get match", function () {
-  this.tournament.addMatch(1, 2)
-  var match = this.tournament.getMatch(1, 2)
+  this.tournament.addMatch("p1", "p2")
+  var match = this.tournament.getMatch("p1", "p2")
   ok(match.players)
 })
 test("Get player matches", function () {
-  this.tournament.addMatch(1, 2)
-  this.tournament.addMatch(1, 3)
-  this.tournament.addMatch(1, 4)
-  var matches = this.tournament.getPlayerMatches(this.tournament.getPlayer(1))
-  ok(matches["m1@2"])
-  ok(matches["m1@3"])
-  ok(matches["m1@4"])
+  this.tournament.addMatch("p1", "p2")
+  this.tournament.addMatch("p1", "p3")
+  this.tournament.addMatch("p1", "p4")
+  var matches = this.tournament.getPlayerMatches(this.tournament.getPlayer("p1"))
+  ok(matches["mp1@p2"])
+  ok(matches["mp1@p3"])
+  ok(matches["mp1@p4"])
 })
 test("Get match matrix", function () {
   var players = [
-    this.tournament.getPlayer(1),
-    this.tournament.getPlayer(2),
-    this.tournament.getPlayer(3),
-    this.tournament.getPlayer(4),
-    this.tournament.getPlayer(5)
+    this.tournament.getPlayer("p1"),
+    this.tournament.getPlayer("p2"),
+    this.tournament.getPlayer("p3"),
+    this.tournament.getPlayer("p4"),
+    this.tournament.getPlayer("p5")
   ]
 
   var matrix = this.tournament.getMatchMatrixForPlayers(players)
-  ok(matrix["m1@2"])
-  ok(matrix["m1@3"])
-  ok(matrix["m1@4"])
-  ok(matrix["m1@5"])
-  ok(matrix["m2@3"])
-  ok(matrix["m2@4"])
-  ok(matrix["m2@5"])
-  ok(matrix["m3@4"])
-  ok(matrix["m3@5"])
-  ok(matrix["m4@5"])
+  ok(matrix["mp1@p2"])
+  ok(matrix["mp1@p3"])
+  ok(matrix["mp1@p4"])
+  ok(matrix["mp1@p5"])
+  ok(matrix["mp2@p3"])
+  ok(matrix["mp2@p4"])
+  ok(matrix["mp2@p5"])
+  ok(matrix["mp3@p4"])
+  ok(matrix["mp3@p5"])
+  ok(matrix["mp4@p5"])
 })
 test("Report match victory", function () {
-  this.tournament.addMatch(1, 2)
-  var match = this.tournament.getMatch(1, 2)
-  var winner = this.tournament.getPlayer(1)
+  this.tournament.addMatch("p1", "p2")
+  var match = this.tournament.getMatch("p1", "p2")
+  var winner = this.tournament.getPlayer("p1")
   match.reportWinner(winner)
-  equal(1, match.winner.id)
-  equal(2, match.loser.id)
+  equal("p1", match.winner.id)
+  equal("p2", match.loser.id)
   equal(1, match.winner.points)
   equal(0, match.loser.points)
-  ok(match.winner.opponents["id2"])
-  ok(match.loser.opponents["id1"])
+  ok(match.winner.opponents["p2"])
+  ok(match.loser.opponents["p1"])
 })
