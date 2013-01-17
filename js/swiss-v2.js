@@ -1,3 +1,11 @@
+Object.prototype.forEach = function(callback) {
+  for(var property in this) {
+    if (this.hasOwnProperty(property) && typeof callback === "function") {
+      callback(property, this[property])
+    }
+  }
+};
+
 var SwissTournament = SwissTournament || {}
 
 SwissTournament = function() {
@@ -26,11 +34,11 @@ SwissTournament = function() {
   }
   Match.prototype.reportWinner = function(winner) {
     var opponent
-    for(var player in this.players) {
-      if (this.players.hasOwnProperty(player) && this.players[player].id != winner.id) {
-        opponent = this.players[player]
+    this.players.forEach(function (playerId, player) {
+      if (playerId != winner.id) {
+        opponent = player
       }
-    }
+    })
 
     this.winner = winner
     this.loser = opponent
@@ -43,15 +51,13 @@ SwissTournament = function() {
   Match.prototype.reportDoubleLoss = function() {
     var player1
     var player2
-    for(var player in this.players) {
-      if (this.players.hasOwnProperty(player)) {
-        if (!player1) {
-          player1 = this.players[player]
-        } else {
-          player2 = this.players[player]
-        }
+    this.players.forEach(function (playerId, player) {
+      if (!player1) {
+        player1 = player
+      } else {
+        player2 = player
       }
-    }
+    })
 
     this.drawed = true
     this.losers = [player1, player2]
@@ -80,14 +86,11 @@ SwissTournament = function() {
   }
   this.getPlayerMatches = function (player) {
     var playerMatches = {}
-    for (var matchName in this.matches) {
-      if (this.matches.hasOwnProperty(matchName)) {
-        var match = this.matches[matchName]
-        if (match.players[player.id]) {
-          playerMatches[matchName] = match
-        }
+    this.matches.forEach(function (matchId, match){
+      if (match.players[player.id]) {
+        playerMatches[matchId] = match
       }
-    }
+    })
 
     return playerMatches
   }
