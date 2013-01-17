@@ -16,6 +16,7 @@ Object.prototype.size = function() {
 var SwissTournament = SwissTournament || {}
 
 SwissTournament = function() {
+  var tournament = this
   var playerCount = 0
   this.players = {}
   this.matches = {}
@@ -74,6 +75,21 @@ SwissTournament = function() {
     player2.opponents[player1.id] = player1
   };
 
+  var MatchMatrix = function (players) {
+    this.matrix = {}
+
+    var player1
+    while (player1 = players.shift()) {
+      for (var i = 0; i < players.length; i++) {
+        var player2 = players[i]
+        var match = new Match(player1, player2)
+
+        if (!tournament.matches[match.id]) {
+          this.matrix[match.id] = match
+        }
+      };
+    }
+  }
   this.addPlayer = function (name, clan) {
     var player = new Player(name, clan)
 
@@ -103,19 +119,6 @@ SwissTournament = function() {
     return playerMatches
   }
   this.getMatchMatrixForPlayers = function (players) {
-    var matrix = {}
-    var player1
-    while (player1 = players.shift()) {
-      for (var i = 0; i < players.length; i++) {
-        var player2 = players[i]
-        var match = new Match(player1, player2)
-
-        if (!this.matches[match.id]) {
-          matrix[match.id] = match
-        }
-      };
-    }
-
-    return matrix
+    return new MatchMatrix(players)
   }
 }
