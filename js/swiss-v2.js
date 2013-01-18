@@ -6,11 +6,11 @@ Object.prototype.forEach = function(callback) {
   }
 };
 Object.prototype.size = function() {
-    var size = 0, key;
+    var size = 0, key
     for (key in this) {
-        if (this.hasOwnProperty(key)) size++;
+        if (this.hasOwnProperty(key)) size++
     }
-    return size;
+    return size
 };
 
 var SwissTournament = SwissTournament || {}
