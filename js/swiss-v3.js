@@ -90,6 +90,19 @@
       return this.matches[makeMatchName(player1, player2)];
     };
 
+    SwissTournament.prototype.getPlayerMatches = function(player) {
+      var match, matchId, matches, _ref;
+      matches = {};
+      _ref = this.matches;
+      for (matchId in _ref) {
+        match = _ref[matchId];
+        if ((match.players[player.id] != null)) {
+          matches[matchId] = match;
+        }
+      }
+      return matches;
+    };
+
     return SwissTournament;
 
   })();

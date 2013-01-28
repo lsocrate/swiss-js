@@ -49,4 +49,16 @@
     return ok(match.players.p2);
   });
 
+  test("Get player matches", function() {
+    var matches;
+    this.tournament.addMatch("p1", "p2");
+    this.tournament.addMatch("p1", "p3");
+    this.tournament.addMatch("p1", "p4");
+    matches = this.tournament.getPlayerMatches(this.tournament.getPlayer("p1"));
+    console.log(matches);
+    ok(matches["m_p1@p2"]);
+    ok(matches["m_p1@p3"]);
+    return ok(matches["m_p1@p4"]);
+  });
+
 }).call(this);

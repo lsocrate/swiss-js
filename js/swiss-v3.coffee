@@ -47,3 +47,10 @@ class @SwissTournament
     player2 = @getPlayer(player2Id)
 
     @matches[makeMatchName(player1, player2)]
+
+  getPlayerMatches: (player) ->
+    matches = {}
+    for matchId, match of @matches
+      if (match.players[player.id]?)
+        matches[matchId] = match
+    matches

@@ -37,3 +37,13 @@ test("Get match", ->
   ok(match.players.p1)
   ok(match.players.p2)
 )
+test("Get player matches", ->
+  @tournament.addMatch("p1", "p2")
+  @tournament.addMatch("p1", "p3")
+  @tournament.addMatch("p1", "p4")
+  matches = @tournament.getPlayerMatches(@tournament.getPlayer("p1"))
+  console.log(matches)
+  ok(matches["m_p1@p2"])
+  ok(matches["m_p1@p3"])
+  ok(matches["m_p1@p4"])
+)
