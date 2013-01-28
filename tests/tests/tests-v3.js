@@ -12,4 +12,12 @@
     return ok(this.tournament.players.p1);
   });
 
+  test("Get player", function() {
+    var player;
+    this.tournament.addPlayer("Anna", "Scorpion");
+    this.tournament.addPlayer("Bob", "Crane");
+    player = this.tournament.getPlayer("p1");
+    return ok(player);
+  });
+
 }).call(this);

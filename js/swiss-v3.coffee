@@ -19,3 +19,6 @@ class @SwissTournament
   addPlayer: (name, clan) ->
     player = new Player(name, clan, nextPlayerId())
     @players[player.id] = player
+
+  getPlayer: (playerId) ->
+    @players[playerId]

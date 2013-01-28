@@ -52,6 +52,10 @@
       return this.players[player.id] = player;
     };
 
+    SwissTournament.prototype.getPlayer = function(playerId) {
+      return this.players[playerId];
+    };
+
     return SwissTournament;
 
   })();
