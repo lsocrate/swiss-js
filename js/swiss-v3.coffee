@@ -11,7 +11,7 @@ makeMatchName = (player1, player2) ->
   "m_" + player1.id + "@" + player2.id
 
 class Player
-  constructor: (@name, @clan, @id) ->
+  constructor: (@name, @clan, @id, @points = 0, @opponents = {}) ->
 
 class Match
   constructor: (player1, player2) ->
@@ -19,6 +19,16 @@ class Match
     @players = {}
     @players[player1.id] = player1
     @players[player2.id] = player2
+
+  reportWinner: (@winner) ->
+    for playerId, player of @players
+      if (playerId isnt @winner.id)
+        @loser = player
+
+    @winner.points++
+    @winner.opponents[@loser.id] = @loser
+    @loser.opponents[@winner.id] = @winner
+
 
 class @SwissTournament
   playerCount = 0

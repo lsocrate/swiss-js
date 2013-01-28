@@ -61,4 +61,18 @@
     return ok(matches["m_p1@p4"]);
   });
 
+  test("Report match victory", function() {
+    var match, winner;
+    this.tournament.addMatch("p1", "p2");
+    match = this.tournament.getMatch("p1", "p2");
+    winner = this.tournament.getPlayer("p1");
+    match.reportWinner(winner);
+    equal("p1", match.winner.id);
+    equal("p2", match.loser.id);
+    equal(1, match.winner.points);
+    equal(0, match.loser.points);
+    ok(match.winner.opponents["p2"]);
+    return ok(match.loser.opponents["p1"]);
+  });
+
 }).call(this);

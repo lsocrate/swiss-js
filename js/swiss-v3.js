@@ -27,10 +27,12 @@
 
   Player = (function() {
 
-    function Player(name, clan, id) {
+    function Player(name, clan, id, points, opponents) {
       this.name = name;
       this.clan = clan;
       this.id = id;
+      this.points = points != null ? points : 0;
+      this.opponents = opponents != null ? opponents : {};
     }
 
     return Player;
@@ -45,6 +47,21 @@
       this.players[player1.id] = player1;
       this.players[player2.id] = player2;
     }
+
+    Match.prototype.reportWinner = function(winner) {
+      var player, playerId, _ref;
+      this.winner = winner;
+      _ref = this.players;
+      for (playerId in _ref) {
+        player = _ref[playerId];
+        if (playerId !== this.winner.id) {
+          this.loser = player;
+        }
+      }
+      this.winner.points++;
+      this.winner.opponents[this.loser.id] = this.loser;
+      return this.loser.opponents[this.winner.id] = this.winner;
+    };
 
     return Match;
 
