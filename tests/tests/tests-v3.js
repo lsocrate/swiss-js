@@ -20,4 +20,25 @@
     return ok(player);
   });
 
+  module("Matches", {
+    setup: function() {
+      this.tournament = new SwissTournament;
+      this.tournament.addPlayer("Anna", "Crab");
+      this.tournament.addPlayer("Bob", "Crane");
+      this.tournament.addPlayer("Claude", "Dragon");
+      this.tournament.addPlayer("Dennis", "Lion");
+      this.tournament.addPlayer("Eliot", "Mantis");
+      this.tournament.addPlayer("Francis", "Phoenix");
+      this.tournament.addPlayer("George", "Scorpion");
+      this.tournament.addPlayer("Henry", "Spider");
+      this.tournament.addPlayer("Irvine", "Unaligned");
+      return this.tournament.addPlayer("Juliet", "Unaligned");
+    }
+  });
+
+  test("Add match", function() {
+    this.tournament.addMatch("p1", "p2");
+    return ok(this.tournament.matches["m_p1@p2"]);
+  });
+
 }).call(this);

@@ -12,3 +12,22 @@ test("Get player", ->
   player = @tournament.getPlayer("p1")
   ok(player)
 )
+
+module("Matches", {
+  setup: ->
+    @tournament = new SwissTournament
+    @tournament.addPlayer("Anna", "Crab")
+    @tournament.addPlayer("Bob", "Crane")
+    @tournament.addPlayer("Claude", "Dragon")
+    @tournament.addPlayer("Dennis", "Lion")
+    @tournament.addPlayer("Eliot", "Mantis")
+    @tournament.addPlayer("Francis", "Phoenix")
+    @tournament.addPlayer("George", "Scorpion")
+    @tournament.addPlayer("Henry", "Spider")
+    @tournament.addPlayer("Irvine", "Unaligned")
+    @tournament.addPlayer("Juliet", "Unaligned")
+})
+test("Add match", ->
+  @tournament.addMatch("p1", "p2")
+  ok(@tournament.matches["m_p1@p2"])
+)
