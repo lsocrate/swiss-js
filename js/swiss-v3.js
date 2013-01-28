@@ -63,6 +63,17 @@
       return this.loser.opponents[this.winner.id] = this.winner;
     };
 
+    Match.prototype.reportDoubleLoss = function() {
+      var player1, player1Id, player2, player2Id, _ref;
+      _ref = Object.keys(this.players), player1Id = _ref[0], player2Id = _ref[1];
+      player1 = this.players[player1Id];
+      player2 = this.players[player2Id];
+      this.drawed = true;
+      this.losers = [player1, player2];
+      player1.opponents[player2.id] = player2;
+      return player2.opponents[player1.id] = player1;
+    };
+
     return Match;
 
   })();

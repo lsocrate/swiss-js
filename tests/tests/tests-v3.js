@@ -55,7 +55,6 @@
     this.tournament.addMatch("p1", "p3");
     this.tournament.addMatch("p1", "p4");
     matches = this.tournament.getPlayerMatches(this.tournament.getPlayer("p1"));
-    console.log(matches);
     ok(matches["m_p1@p2"]);
     ok(matches["m_p1@p3"]);
     return ok(matches["m_p1@p4"]);
@@ -73,6 +72,21 @@
     equal(0, match.loser.points);
     ok(match.winner.opponents["p2"]);
     return ok(match.loser.opponents["p1"]);
+  });
+
+  test("Report double loss", function() {
+    var match, player1, player2;
+    this.tournament.addMatch("p1", "p2");
+    match = this.tournament.getMatch("p1", "p2");
+    player1 = this.tournament.getPlayer("p1");
+    player2 = this.tournament.getPlayer("p2");
+    match.reportDoubleLoss();
+    equal(0, player1.points);
+    equal(0, player2.points);
+    equal(2, match.losers.length);
+    ok(match.drawed);
+    ok(player1.opponents["p2"]);
+    return ok(player2.opponents["p1"]);
   });
 
 }).call(this);
