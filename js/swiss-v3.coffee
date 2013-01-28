@@ -7,13 +7,13 @@ Object.size = (object) ->
     size++
   size
 
+makeMatchName = (player1, player2) ->
+  "m_" + player1.id + "@" + player2.id
+
 class Player
   constructor: (@name, @clan, @id) ->
 
 class Match
-  makeMatchName = (player1, player2) ->
-    "m_" + player1.id + "@" + player2.id
-
   constructor: (player1, player2) ->
     @id = makeMatchName(player1, player2)
     @players = {}
@@ -41,3 +41,9 @@ class @SwissTournament
     match = new Match(player1, player2)
 
     @matches[match.id] = match
+
+  getMatch: (player1Id, player2Id) ->
+    player1 = @getPlayer(player1Id)
+    player2 = @getPlayer(player2Id)
+
+    @matches[makeMatchName(player1, player2)]

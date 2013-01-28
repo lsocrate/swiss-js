@@ -31,3 +31,9 @@ test("Add match", ->
   @tournament.addMatch("p1", "p2")
   ok(@tournament.matches["m_p1@p2"])
 )
+test("Get match", ->
+  @tournament.addMatch("p1", "p2")
+  match = @tournament.getMatch("p1", "p2")
+  ok(match.players.p1)
+  ok(match.players.p2)
+)

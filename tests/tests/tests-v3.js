@@ -41,4 +41,12 @@
     return ok(this.tournament.matches["m_p1@p2"]);
   });
 
+  test("Get match", function() {
+    var match;
+    this.tournament.addMatch("p1", "p2");
+    match = this.tournament.getMatch("p1", "p2");
+    ok(match.players.p1);
+    return ok(match.players.p2);
+  });
+
 }).call(this);
