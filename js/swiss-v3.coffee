@@ -1,12 +1,3 @@
-Object.forEach = (object, callback) ->
-  callback(value, name) for key, value of object
-
-Object.size = (object) ->
-  size = 0
-  for key of object
-    size++
-  size
-
 makeMatchName = (player1, player2) ->
   "m_" + player1.id + "@" + player2.id
 

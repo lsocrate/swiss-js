@@ -2,25 +2,6 @@
 (function() {
   var Match, MatchMatrix, Player, makeMatchName;
 
-  Object.forEach = function(object, callback) {
-    var key, value, _results;
-    _results = [];
-    for (key in object) {
-      value = object[key];
-      _results.push(callback(value, name));
-    }
-    return _results;
-  };
-
-  Object.size = function(object) {
-    var key, size;
-    size = 0;
-    for (key in object) {
-      size++;
-    }
-    return size;
-  };
-
   makeMatchName = function(player1, player2) {
     return "m_" + player1.id + "@" + player2.id;
   };
