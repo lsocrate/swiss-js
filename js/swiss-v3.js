@@ -87,6 +87,21 @@
       }
     }
 
+    MatchMatrix.prototype.getSingularMatches = function() {
+      var match, matches, opponents, opponentsKeys, playerId, _ref;
+      matches = {};
+      _ref = this.matrix;
+      for (playerId in _ref) {
+        opponents = _ref[playerId];
+        opponentsKeys = Object.keys(opponents);
+        if (opponentsKeys.length === 1) {
+          match = opponents[opponentsKeys[0]];
+          matches[match.id] = match;
+        }
+      }
+      return matches;
+    };
+
     return MatchMatrix;
 
   })();

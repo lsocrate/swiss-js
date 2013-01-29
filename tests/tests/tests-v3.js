@@ -123,4 +123,17 @@
     return ok(matrix.matches["m_p4@p5"]);
   });
 
+  test("Get unique matches which are the only possible for some of it's players", function() {
+    var matrix, matrixSize, singularMatches, singularMatchesSize;
+    this.tournament.addMatch("p1", "p2");
+    this.tournament.addMatch("p1", "p3");
+    this.tournament.addMatch("p1", "p4");
+    matrix = this.tournament.getMatchMatrixForPlayers(this.players);
+    matrixSize = Object.keys(matrix.matches).length;
+    equal(matrixSize, 7);
+    singularMatches = matrix.getSingularMatches();
+    singularMatchesSize = Object.keys(singularMatches).length;
+    return equal(singularMatchesSize, 1);
+  });
+
 }).call(this);

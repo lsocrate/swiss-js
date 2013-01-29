@@ -111,3 +111,16 @@ test("Get match matrix", ->
   ok(matrix.matches["m_p3@p5"])
   ok(matrix.matches["m_p4@p5"])
 )
+test("Get unique matches which are the only possible for some of it's players", ->
+  @tournament.addMatch("p1", "p2")
+  @tournament.addMatch("p1", "p3")
+  @tournament.addMatch("p1", "p4")
+
+  matrix = @tournament.getMatchMatrixForPlayers(@players)
+  matrixSize = Object.keys(matrix.matches).length
+  equal(matrixSize, 7)
+
+  singularMatches = matrix.getSingularMatches()
+  singularMatchesSize = Object.keys(singularMatches).length
+  equal(singularMatchesSize, 1)
+)

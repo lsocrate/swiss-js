@@ -46,9 +46,14 @@ class MatchMatrix
 
           @matrix[player2.id] = {} unless @matrix[player2.id]?
           @matrix[player2.id][player1.id] = match
-
-
-
+  getSingularMatches: ->
+    matches = {}
+    for playerId, opponents of @matrix
+      opponentsKeys = Object.keys(opponents)
+      if opponentsKeys.length is 1
+        match = opponents[opponentsKeys[0]]
+        matches[match.id] = match
+    matches
 
 class @SwissTournament
   playerCount = 0
