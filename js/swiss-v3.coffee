@@ -38,6 +38,26 @@ class Match
     player1.opponents[player2.id] = player2
     player2.opponents[player1.id] = player1
 
+class MatchMatrix
+  matches: {}
+  matrix: {}
+
+  constructor: (players, @tournament) ->
+    while player1 = players.shift()
+      for player2 in players
+        match = new Match(player1, player2)
+
+        unless @tournament.matches[match.id]?
+          @matches[match.id] = match
+
+          @matrix[player1.id] = {} unless @matrix[player1.id]?
+          @matrix[player1.id][player2.id] = match
+
+          @matrix[player2.id] = {} unless @matrix[player2.id]?
+          @matrix[player2.id][player1.id] = match
+
+
+
 
 class @SwissTournament
   playerCount = 0
@@ -73,3 +93,6 @@ class @SwissTournament
       if (match.players[player.id]?)
         matches[matchId] = match
     matches
+
+  getMatchMatrixForPlayers: (players) ->
+    new MatchMatrix(players, @)

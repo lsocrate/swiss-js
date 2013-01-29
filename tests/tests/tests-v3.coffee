@@ -72,3 +72,42 @@ test("Report double loss", ->
   ok(player1.opponents["p4"])
   ok(player2.opponents["p3"])
 )
+
+module("Match Matrix", {
+  setup: ->
+    @tournament = new SwissTournament
+    @tournament.addPlayer("Anna", "Crab")
+    @tournament.addPlayer("Bob", "Crane")
+    @tournament.addPlayer("Claude", "Dragon")
+    @tournament.addPlayer("Dennis", "Lion")
+    @tournament.addPlayer("Eliot", "Mantis")
+    @tournament.addPlayer("Francis", "Phoenix")
+    @tournament.addPlayer("George", "Scorpion")
+    @tournament.addPlayer("Henry", "Spider")
+    @tournament.addPlayer("Irvine", "Unaligned")
+    @tournament.addPlayer("Juliet", "Unaligned")
+
+    @players = [
+      @tournament.getPlayer("p1")
+      @tournament.getPlayer("p2")
+      @tournament.getPlayer("p3")
+      @tournament.getPlayer("p4")
+      @tournament.getPlayer("p5")
+    ]
+})
+test("Get match matrix", ->
+  @tournament.addMatch("p1", "p2")
+  matrix = @tournament.getMatchMatrixForPlayers(@players)
+  matrixSize = Object.keys(matrix.matches).length
+
+  equal(matrixSize, 9)
+  ok(matrix.matches["m_p1@p3"])
+  ok(matrix.matches["m_p1@p4"])
+  ok(matrix.matches["m_p1@p5"])
+  ok(matrix.matches["m_p2@p3"])
+  ok(matrix.matches["m_p2@p4"])
+  ok(matrix.matches["m_p2@p5"])
+  ok(matrix.matches["m_p3@p4"])
+  ok(matrix.matches["m_p3@p5"])
+  ok(matrix.matches["m_p4@p5"])
+)

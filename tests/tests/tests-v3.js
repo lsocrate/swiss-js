@@ -89,4 +89,38 @@
     return ok(player2.opponents["p3"]);
   });
 
+  module("Match Matrix", {
+    setup: function() {
+      this.tournament = new SwissTournament;
+      this.tournament.addPlayer("Anna", "Crab");
+      this.tournament.addPlayer("Bob", "Crane");
+      this.tournament.addPlayer("Claude", "Dragon");
+      this.tournament.addPlayer("Dennis", "Lion");
+      this.tournament.addPlayer("Eliot", "Mantis");
+      this.tournament.addPlayer("Francis", "Phoenix");
+      this.tournament.addPlayer("George", "Scorpion");
+      this.tournament.addPlayer("Henry", "Spider");
+      this.tournament.addPlayer("Irvine", "Unaligned");
+      this.tournament.addPlayer("Juliet", "Unaligned");
+      return this.players = [this.tournament.getPlayer("p1"), this.tournament.getPlayer("p2"), this.tournament.getPlayer("p3"), this.tournament.getPlayer("p4"), this.tournament.getPlayer("p5")];
+    }
+  });
+
+  test("Get match matrix", function() {
+    var matrix, matrixSize;
+    this.tournament.addMatch("p1", "p2");
+    matrix = this.tournament.getMatchMatrixForPlayers(this.players);
+    matrixSize = Object.keys(matrix.matches).length;
+    equal(matrixSize, 9);
+    ok(matrix.matches["m_p1@p3"]);
+    ok(matrix.matches["m_p1@p4"]);
+    ok(matrix.matches["m_p1@p5"]);
+    ok(matrix.matches["m_p2@p3"]);
+    ok(matrix.matches["m_p2@p4"]);
+    ok(matrix.matches["m_p2@p5"]);
+    ok(matrix.matches["m_p3@p4"]);
+    ok(matrix.matches["m_p3@p5"]);
+    return ok(matrix.matches["m_p4@p5"]);
+  });
+
 }).call(this);
