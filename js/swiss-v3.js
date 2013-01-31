@@ -171,7 +171,7 @@
       _ref = this.matches;
       for (matchId in _ref) {
         match = _ref[matchId];
-        if ((match.players[player.id] != null)) {
+        if (match.players[player.id] != null) {
           matches[matchId] = match;
         }
       }

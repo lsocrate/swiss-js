@@ -98,8 +98,7 @@ class @SwissTournament
   getPlayerMatches: (player) ->
     matches = {}
     for matchId, match of @matches
-      if (match.players[player.id]?)
-        matches[matchId] = match
+      matches[matchId] = match if match.players[player.id]?
     matches
 
   getMatchMatrixForPlayers: (players) ->
