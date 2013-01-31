@@ -148,4 +148,25 @@
     return equal(Object.keys(matrix.matrix["p4"]).length, 3);
   });
 
+  module("Round", {
+    setup: function() {
+      this.tournament = new SwissTournament;
+      this.tournament.addPlayer("Anna", "Crab");
+      this.tournament.addPlayer("Bob", "Crane");
+      this.tournament.addPlayer("Claude", "Dragon");
+      this.tournament.addPlayer("Dennis", "Lion");
+      this.tournament.addPlayer("Eliot", "Mantis");
+      this.tournament.addPlayer("Francis", "Phoenix");
+      this.tournament.addPlayer("George", "Scorpion");
+      this.tournament.addPlayer("Henry", "Spider");
+      this.tournament.addPlayer("Irvine", "Unaligned");
+      return this.tournament.addPlayer("Juliet", "Unaligned");
+    }
+  });
+
+  test("Add round", function() {
+    this.tournament.addRound();
+    return equal(this.tournament.rounds.length, 1);
+  });
+
 }).call(this);

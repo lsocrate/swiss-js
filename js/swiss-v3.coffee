@@ -30,7 +30,6 @@ class Match
     player2.opponents[player1.id] = player1
 
 class MatchMatrix
-
   constructor: (players, @tournament) ->
     @matches = {}
     @matrix = {}
@@ -64,11 +63,15 @@ class MatchMatrix
     for opponentId, opponentOpponents of @matrix
       delete @matrix[opponentId][player.id] if opponentOpponents[player.id]?
 
+class Round
+  constructor: (@tournament) ->
+
 
 class @SwissTournament
   constructor: ->
     @players = {}
     @matches = {}
+    @rounds = []
 
   nextPlayerId: ->
     playerCount = Object.keys(@players).length
@@ -103,3 +106,6 @@ class @SwissTournament
 
   getMatchMatrixForPlayers: (players) ->
     new MatchMatrix(players, @)
+
+  addRound: ->
+    @rounds.push(new Round(@))

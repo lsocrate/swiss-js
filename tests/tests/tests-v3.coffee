@@ -135,3 +135,22 @@ test("Remove player matches", ->
   equal(Object.keys(matrix.matrix["p3"]).length, 3)
   equal(Object.keys(matrix.matrix["p4"]).length, 3)
 )
+
+module("Round", {
+  setup: ->
+    @tournament = new SwissTournament
+    @tournament.addPlayer("Anna", "Crab")
+    @tournament.addPlayer("Bob", "Crane")
+    @tournament.addPlayer("Claude", "Dragon")
+    @tournament.addPlayer("Dennis", "Lion")
+    @tournament.addPlayer("Eliot", "Mantis")
+    @tournament.addPlayer("Francis", "Phoenix")
+    @tournament.addPlayer("George", "Scorpion")
+    @tournament.addPlayer("Henry", "Spider")
+    @tournament.addPlayer("Irvine", "Unaligned")
+    @tournament.addPlayer("Juliet", "Unaligned")
+})
+test("Add round", ->
+  @tournament.addRound()
+  equal(@tournament.rounds.length, 1)
+)
