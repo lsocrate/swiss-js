@@ -128,29 +128,27 @@
   })();
 
   this.SwissTournament = (function() {
-    var nextPlayerId, playerCount;
 
-    function SwissTournament() {}
+    function SwissTournament() {
+      this.players = {};
+      this.matches = {};
+    }
 
-    playerCount = 0;
-
-    nextPlayerId = function() {
+    SwissTournament.prototype.nextPlayerId = function() {
+      var playerCount;
+      playerCount = Object.keys(this.players).length;
       return "p" + ++playerCount;
     };
 
-    SwissTournament.prototype.players = {};
-
     SwissTournament.prototype.addPlayer = function(name, clan) {
       var player;
-      player = new Player(name, clan, nextPlayerId());
+      player = new Player(name, clan, this.nextPlayerId());
       return this.players[player.id] = player;
     };
 
     SwissTournament.prototype.getPlayer = function(playerId) {
       return this.players[playerId];
     };
-
-    SwissTournament.prototype.matches = {};
 
     SwissTournament.prototype.addMatch = function(player1Id, player2Id) {
       var match, player1, player2;

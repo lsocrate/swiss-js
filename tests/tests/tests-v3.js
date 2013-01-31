@@ -139,6 +139,7 @@
   test("Remove player matches", function() {
     var matrix, matrixSize, player1;
     matrix = this.tournament.getMatchMatrixForPlayers(this.players);
+    console.log(this.tournament);
     player1 = this.tournament.getPlayer("p1");
     matrix.removePlayerMatches(player1);
     matrixSize = Object.keys(matrix.matches).length;

@@ -126,7 +126,7 @@ test("Get unique matches which are the only possible for some of it's players", 
 )
 test("Remove player matches", ->
   matrix = @tournament.getMatchMatrixForPlayers(@players)
-
+  console.log(@tournament)
   player1 = @tournament.getPlayer("p1")
   matrix.removePlayerMatches(player1)
   matrixSize = Object.keys(matrix.matches).length

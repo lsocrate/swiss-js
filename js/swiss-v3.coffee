@@ -66,19 +66,21 @@ class MatchMatrix
 
 
 class @SwissTournament
-  playerCount = 0
-  nextPlayerId = ->
+  constructor: ->
+    @players = {}
+    @matches = {}
+
+  nextPlayerId: ->
+    playerCount = Object.keys(@players).length
     "p" + ++playerCount
 
-  players: {}
   addPlayer: (name, clan) ->
-    player = new Player(name, clan, nextPlayerId())
+    player = new Player(name, clan, @nextPlayerId())
     @players[player.id] = player
 
   getPlayer: (playerId) ->
     @players[playerId]
 
-  matches: {}
   addMatch: (player1Id, player2Id) ->
     player1 = @getPlayer(player1Id)
     player2 = @getPlayer(player2Id)
