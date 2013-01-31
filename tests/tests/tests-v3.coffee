@@ -154,3 +154,7 @@ test("Add round", ->
   @tournament.addRound()
   equal(@tournament.rounds.length, 1)
 )
+test("Get round", ->
+  @tournament.addRound()
+  ok(@tournament.getRound(1))
+)

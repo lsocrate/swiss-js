@@ -109,3 +109,6 @@ class @SwissTournament
 
   addRound: ->
     @rounds.push(new Round(@))
+
+  getRound: (round) ->
+    @rounds[--round]

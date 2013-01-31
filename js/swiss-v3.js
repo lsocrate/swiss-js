@@ -197,6 +197,10 @@
       return this.rounds.push(new Round(this));
     };
 
+    SwissTournament.prototype.getRound = function(round) {
+      return this.rounds[--round];
+    };
+
     return SwissTournament;
 
   })();

@@ -169,4 +169,9 @@
     return equal(this.tournament.rounds.length, 1);
   });
 
+  test("Get round", function() {
+    this.tournament.addRound();
+    return ok(this.tournament.getRound(1));
+  });
+
 }).call(this);
