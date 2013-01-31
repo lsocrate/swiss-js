@@ -124,3 +124,15 @@ test("Get unique matches which are the only possible for some of it's players", 
   singularMatchesSize = Object.keys(singularMatches).length
   equal(singularMatchesSize, 1)
 )
+test("Remove player matches", ->
+  matrix = @tournament.getMatchMatrixForPlayers(@players)
+
+  player1 = @tournament.getPlayer("p1")
+  matrix.removePlayerMatches(player1)
+  matrixSize = Object.keys(matrix.matches).length
+
+  equal(matrixSize, 6)
+  equal(Object.keys(matrix.matrix["p2"]).length, 3)
+  equal(Object.keys(matrix.matrix["p3"]).length, 3)
+  equal(Object.keys(matrix.matrix["p4"]).length, 3)
+)

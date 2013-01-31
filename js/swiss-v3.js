@@ -61,13 +61,11 @@
 
   MatchMatrix = (function() {
 
-    MatchMatrix.prototype.matches = {};
-
-    MatchMatrix.prototype.matrix = {};
-
     function MatchMatrix(players, tournament) {
       var match, player1, player2, _i, _len;
       this.tournament = tournament;
+      this.matches = {};
+      this.matrix = {};
       while (player1 = players.shift()) {
         for (_i = 0, _len = players.length; _i < _len; _i++) {
           player2 = players[_i];
@@ -100,6 +98,29 @@
         }
       }
       return matches;
+    };
+
+    MatchMatrix.prototype.removePlayerMatches = function(player) {
+      var match, matchId, opponentId, opponentOpponents, _ref, _ref1, _results;
+      delete this.matrix[player.id];
+      _ref = this.matches;
+      for (matchId in _ref) {
+        match = _ref[matchId];
+        if (match.players[player.id] != null) {
+          delete this.matches[matchId];
+        }
+      }
+      _ref1 = this.matrix;
+      _results = [];
+      for (opponentId in _ref1) {
+        opponentOpponents = _ref1[opponentId];
+        if (opponentOpponents[player.id] != null) {
+          _results.push(delete this.matrix[opponentId][player.id]);
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
     };
 
     return MatchMatrix;

@@ -30,10 +30,11 @@ class Match
     player2.opponents[player1.id] = player1
 
 class MatchMatrix
-  matches: {}
-  matrix: {}
 
   constructor: (players, @tournament) ->
+    @matches = {}
+    @matrix = {}
+
     while player1 = players.shift()
       for player2 in players
         match = new Match(player1, player2)
@@ -46,6 +47,7 @@ class MatchMatrix
 
           @matrix[player2.id] = {} unless @matrix[player2.id]?
           @matrix[player2.id][player1.id] = match
+
   getSingularMatches: ->
     matches = {}
     for playerId, opponents of @matrix
@@ -54,6 +56,14 @@ class MatchMatrix
         match = opponents[opponentsKeys[0]]
         matches[match.id] = match
     matches
+
+  removePlayerMatches: (player) ->
+    delete @matrix[player.id]
+    for matchId, match of @matches
+      delete @matches[matchId] if match.players[player.id]?
+    for opponentId, opponentOpponents of @matrix
+      delete @matrix[opponentId][player.id] if opponentOpponents[player.id]?
+
 
 class @SwissTournament
   playerCount = 0

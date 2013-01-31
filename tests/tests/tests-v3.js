@@ -136,4 +136,16 @@
     return equal(singularMatchesSize, 1);
   });
 
+  test("Remove player matches", function() {
+    var matrix, matrixSize, player1;
+    matrix = this.tournament.getMatchMatrixForPlayers(this.players);
+    player1 = this.tournament.getPlayer("p1");
+    matrix.removePlayerMatches(player1);
+    matrixSize = Object.keys(matrix.matches).length;
+    equal(matrixSize, 6);
+    equal(Object.keys(matrix.matrix["p2"]).length, 3);
+    equal(Object.keys(matrix.matrix["p3"]).length, 3);
+    return equal(Object.keys(matrix.matrix["p4"]).length, 3);
+  });
+
 }).call(this);
