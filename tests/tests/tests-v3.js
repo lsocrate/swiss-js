@@ -37,8 +37,13 @@
   });
 
   test("Add match", function() {
+    var player1, player2;
     this.tournament.addMatch("p1", "p2");
-    return ok(this.tournament.matches["m_p1@p2"]);
+    player1 = this.tournament.getPlayer("p1");
+    player2 = this.tournament.getPlayer("p2");
+    ok(this.tournament.matches["m_p1@p2"]);
+    ok(player1.opponents.p2);
+    return ok(player2.opponents.p1);
   });
 
   test("Get match", function() {
@@ -172,6 +177,14 @@
   test("Get round", function() {
     this.tournament.addRound();
     return ok(this.tournament.getRound(1));
+  });
+
+  test("Add match to round", function() {
+    var round;
+    this.tournament.addRound();
+    round = this.tournament.getRound(1);
+    round.addMatch("p1", "p2");
+    return ok(round.matches["m_p1@p2"]);
   });
 
 }).call(this);

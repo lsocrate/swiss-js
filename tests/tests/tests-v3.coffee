@@ -29,7 +29,13 @@ module("Matches", {
 })
 test("Add match", ->
   @tournament.addMatch("p1", "p2")
+
+  player1 = @tournament.getPlayer("p1")
+  player2 = @tournament.getPlayer("p2")
+
   ok(@tournament.matches["m_p1@p2"])
+  ok(player1.opponents.p2)
+  ok(player2.opponents.p1)
 )
 test("Get match", ->
   @tournament.addMatch("p1", "p2")
@@ -157,4 +163,12 @@ test("Add round", ->
 test("Get round", ->
   @tournament.addRound()
   ok(@tournament.getRound(1))
+)
+test("Add match to round", ->
+  @tournament.addRound()
+
+  round = @tournament.getRound(1)
+  round.addMatch("p1", "p2")
+
+  ok(round.matches["m_p1@p2"])
 )

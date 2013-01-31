@@ -65,6 +65,12 @@ class MatchMatrix
 
 class Round
   constructor: (@tournament) ->
+    @matches = {}
+
+  addMatch: (player1, player2) ->
+    match = @tournament.addMatch(player1, player2)
+    @matches[match.id] = match
+    console.log(@matches)
 
 
 class @SwissTournament
@@ -87,6 +93,9 @@ class @SwissTournament
   addMatch: (player1Id, player2Id) ->
     player1 = @getPlayer(player1Id)
     player2 = @getPlayer(player2Id)
+
+    player1.opponents[player2.id] = player2
+    player2.opponents[player1.id] = player1
 
     match = new Match(player1, player2)
 

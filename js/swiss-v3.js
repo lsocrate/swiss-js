@@ -131,7 +131,15 @@
 
     function Round(tournament) {
       this.tournament = tournament;
+      this.matches = {};
     }
+
+    Round.prototype.addMatch = function(player1, player2) {
+      var match;
+      match = this.tournament.addMatch(player1, player2);
+      this.matches[match.id] = match;
+      return console.log(this.matches);
+    };
 
     return Round;
 
@@ -165,6 +173,8 @@
       var match, player1, player2;
       player1 = this.getPlayer(player1Id);
       player2 = this.getPlayer(player2Id);
+      player1.opponents[player2.id] = player2;
+      player2.opponents[player1.id] = player1;
       match = new Match(player1, player2);
       return this.matches[match.id] = match;
     };
