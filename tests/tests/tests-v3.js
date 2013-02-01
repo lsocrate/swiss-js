@@ -187,4 +187,85 @@
     return ok(round.matches["m_p1@p2"]);
   });
 
+  module("Ranking", {
+    setup: function() {
+      this.tournament = new SwissTournament;
+      this.tournament.addPlayer("Anna", "Crab");
+      this.tournament.addPlayer("Bob", "Crane");
+      this.tournament.addPlayer("Claude", "Dragon");
+      this.tournament.addPlayer("Dennis", "Lion");
+      this.tournament.addPlayer("Eliot", "Mantis");
+      this.tournament.addPlayer("Francis", "Phoenix");
+      this.tournament.addPlayer("George", "Scorpion");
+      this.tournament.addPlayer("Henry", "Spider");
+      this.tournament.addPlayer("Irvine", "Unaligned");
+      return this.tournament.addPlayer("Juliet", "Unaligned");
+    }
+  });
+
+  test("Rank players with ms", function() {
+    var anna, bob, claude, dennis, eliot, francis, george, henry, irvine, juliet, ranking;
+    anna = this.tournament.getPlayer("p1");
+    bob = this.tournament.getPlayer("p2");
+    claude = this.tournament.getPlayer("p3");
+    dennis = this.tournament.getPlayer("p4");
+    eliot = this.tournament.getPlayer("p5");
+    francis = this.tournament.getPlayer("p6");
+    george = this.tournament.getPlayer("p7");
+    henry = this.tournament.getPlayer("p8");
+    irvine = this.tournament.getPlayer("p9");
+    juliet = this.tournament.getPlayer("p10");
+    this.tournament.addMatch(dennis.id, juliet.id).reportWinner(juliet);
+    this.tournament.addMatch(francis.id, irvine.id).reportWinner(irvine);
+    this.tournament.addMatch(bob.id, henry.id).reportWinner(henry);
+    this.tournament.addMatch(anna.id, claude.id).reportWinner(claude);
+    this.tournament.addMatch(eliot.id, george.id).reportWinner(george);
+    this.tournament.addMatch(irvine.id, juliet.id).reportWinner(juliet);
+    this.tournament.addMatch(henry.id, george.id).reportWinner(henry);
+    this.tournament.addMatch(dennis.id, claude.id).reportWinner(dennis);
+    this.tournament.addMatch(bob.id, francis.id).reportWinner(francis);
+    this.tournament.addMatch(anna.id, eliot.id).reportWinner(eliot);
+    this.tournament.addMatch(henry.id, juliet.id).reportWinner(juliet);
+    this.tournament.addMatch(george.id, irvine.id).reportWinner(irvine);
+    this.tournament.addMatch(claude.id, francis.id).reportWinner(francis);
+    this.tournament.addMatch(dennis.id, eliot.id).reportWinner(eliot);
+    this.tournament.addMatch(anna.id, bob.id).reportWinner(bob);
+    this.tournament.addMatch(francis.id, juliet.id).reportWinner(juliet);
+    this.tournament.addMatch(eliot.id, irvine.id).reportWinner(irvine);
+    this.tournament.addMatch(claude.id, henry.id).reportWinner(henry);
+    this.tournament.addMatch(bob.id, george.id).reportWinner(george);
+    this.tournament.addMatch(anna.id, dennis.id).reportWinner(dennis);
+    ranking = this.tournament.getRankedPlayers();
+    equal(juliet.points, 4, "juliet points");
+    equal(irvine.points, 3, "irvine points");
+    equal(henry.points, 3, "henry points");
+    equal(george.points, 2, "george points");
+    equal(francis.points, 2, "francis points");
+    equal(eliot.points, 2, "eliot points");
+    equal(dennis.points, 2, "dennis points");
+    equal(claude.points, 1, "claude points");
+    equal(bob.points, 1, "bob points");
+    equal(anna.points, 0, "anna points");
+    equal(juliet.ms.total, 10, "juliet ms total");
+    equal(irvine.ms.total, 10, "irvine ms total");
+    equal(henry.ms.total, 8, "henry ms total");
+    equal(george.ms.total, 9, "george ms total");
+    equal(francis.ms.total, 9, "francis ms total");
+    equal(eliot.ms.total, 7, "eliot ms total");
+    equal(dennis.ms.total, 7, "dennis ms total");
+    equal(claude.ms.total, 7, "claude ms total");
+    equal(bob.ms.total, 7, "bob ms total");
+    equal(anna.ms.total, 6, "anna ms total");
+    equal(ranking[0].name, "Juliet", "Juliet ranking");
+    equal(ranking[1].name, "Irvine", "Irvine ranking");
+    equal(ranking[2].name, "Henry", "Henry ranking");
+    equal(ranking[3].name, "George", "George ranking");
+    equal(ranking[4].name, "Francis", "Francis ranking");
+    equal(ranking[5].name, "Eliot", "Eliot ranking");
+    equal(ranking[6].name, "Dennis", "Dennis ranking");
+    equal(ranking[7].name, "Claude", "Claude ranking");
+    equal(ranking[8].name, "Bob", "Bob ranking");
+    return equal(ranking[9].name, "Anna", "Anna ranking");
+  });
+
 }).call(this);

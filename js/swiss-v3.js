@@ -8,13 +8,44 @@
 
   Player = (function() {
 
-    function Player(name, clan, id, points, opponents) {
+    function Player(name, clan, id) {
       this.name = name;
       this.clan = clan;
       this.id = id;
-      this.points = points != null ? points : 0;
-      this.opponents = opponents != null ? opponents : {};
+      this.points = 0;
+      this.opponents = {};
+      this.matches = {};
+      this.ms = {
+        total: 0,
+        victories: 0,
+        losses: 0
+      };
     }
+
+    Player.prototype.registerMatch = function(match) {
+      return this.matches[match.id] = match;
+    };
+
+    Player.prototype.calculateMiliseconds = function() {
+      var match, matchId, opponent, _ref;
+      this.ms = {
+        total: 0,
+        victories: 0,
+        losses: 0
+      };
+      _ref = this.matches;
+      for (matchId in _ref) {
+        match = _ref[matchId];
+        opponent = match.getOpponentForPlayer(this);
+        this.ms.total += opponent.points;
+        if (match.winner.id === this.id) {
+          this.ms.victories += opponent.points;
+        } else {
+          this.ms.losses += opponent.points;
+        }
+      }
+      return this.ms;
+    };
 
     return Player;
 
@@ -53,6 +84,17 @@
       this.losers = [player1, player2];
       player1.opponents[player2.id] = player2;
       return player2.opponents[player1.id] = player1;
+    };
+
+    Match.prototype.getOpponentForPlayer = function(player) {
+      var matchPlayer, matchPlayerId, _ref;
+      _ref = this.players;
+      for (matchPlayerId in _ref) {
+        matchPlayer = _ref[matchPlayerId];
+        if (matchPlayer.id !== player.id) {
+          return matchPlayer;
+        }
+      }
     };
 
     return Match;
@@ -137,8 +179,7 @@
     Round.prototype.addMatch = function(player1, player2) {
       var match;
       match = this.tournament.addMatch(player1, player2);
-      this.matches[match.id] = match;
-      return console.log(this.matches);
+      return this.matches[match.id] = match;
     };
 
     return Round;
@@ -176,6 +217,8 @@
       player1.opponents[player2.id] = player2;
       player2.opponents[player1.id] = player1;
       match = new Match(player1, player2);
+      player1.registerMatch(match);
+      player2.registerMatch(match);
       return this.matches[match.id] = match;
     };
 
@@ -209,6 +252,34 @@
 
     SwissTournament.prototype.getRound = function(round) {
       return this.rounds[--round];
+    };
+
+    SwissTournament.prototype.getCurrentRound = function() {
+      return this.rounds[this.rounds.length - 1];
+    };
+
+    SwissTournament.prototype.getRankedPlayers = function() {
+      var id, player, playerList, _ref;
+      playerList = [];
+      _ref = this.players;
+      for (id in _ref) {
+        player = _ref[id];
+        playerList.push(player);
+      }
+      playerList.forEach(function(player) {
+        return player.calculateMiliseconds();
+      });
+      return playerList.sort(function(a, b) {
+        if (b.points !== a.points) {
+          return b.points - a.points;
+        } else if (b.ms.total !== a.ms.total) {
+          return b.ms.total - a.ms.total;
+        } else if (b.ms.victories !== a.ms.victories) {
+          return b.ms.victories - a.ms.victories;
+        } else {
+          return b.ms.losses - a.ms.losses;
+        }
+      });
     };
 
     return SwissTournament;

@@ -2,7 +2,33 @@ makeMatchName = (player1, player2) ->
   "m_" + player1.id + "@" + player2.id
 
 class Player
-  constructor: (@name, @clan, @id, @points = 0, @opponents = {}) ->
+  constructor: (@name, @clan, @id) ->
+    @points = 0
+    @opponents = {}
+    @matches = {}
+    @ms =
+      total: 0
+      victories: 0
+      losses: 0
+
+  registerMatch: (match) ->
+    @matches[match.id] = match
+
+  calculateMiliseconds: ->
+    @ms =
+      total: 0
+      victories: 0
+      losses: 0
+
+    for matchId, match of @matches
+      opponent = match.getOpponentForPlayer(@)
+      @ms.total += opponent.points
+      if match.winner.id is @id
+        @ms.victories += opponent.points
+      else
+        @ms.losses += opponent.points
+
+    @ms
 
 class Match
   constructor: (player1, player2) ->
@@ -28,6 +54,11 @@ class Match
     @losers = [player1, player2]
     player1.opponents[player2.id] = player2
     player2.opponents[player1.id] = player1
+
+  getOpponentForPlayer: (player) ->
+    for matchPlayerId, matchPlayer of @players
+      return matchPlayer if matchPlayer.id isnt player.id
+
 
 class MatchMatrix
   constructor: (players, @tournament) ->
@@ -70,10 +101,9 @@ class Round
   addMatch: (player1, player2) ->
     match = @tournament.addMatch(player1, player2)
     @matches[match.id] = match
-    console.log(@matches)
-
 
 class @SwissTournament
+
   constructor: ->
     @players = {}
     @matches = {}
@@ -98,6 +128,8 @@ class @SwissTournament
     player2.opponents[player1.id] = player1
 
     match = new Match(player1, player2)
+    player1.registerMatch(match)
+    player2.registerMatch(match)
 
     @matches[match.id] = match
 
@@ -121,3 +153,25 @@ class @SwissTournament
 
   getRound: (round) ->
     @rounds[--round]
+
+  getCurrentRound: ->
+    @rounds[@rounds.length - 1]
+
+  getRankedPlayers: ->
+    playerList = []
+    for id, player of @players
+      playerList.push(player)
+
+    playerList.forEach((player) ->
+      player.calculateMiliseconds()
+    )
+    playerList.sort((a, b) ->
+      if b.points isnt a.points
+        return b.points - a.points
+      else if b.ms.total isnt a.ms.total
+        return b.ms.total - a.ms.total
+      else if b.ms.victories isnt a.ms.victories
+        return b.ms.victories - a.ms.victories
+      else
+        return b.ms.losses - a.ms.losses
+    )
