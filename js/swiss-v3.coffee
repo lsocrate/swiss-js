@@ -11,6 +11,9 @@ rankPlayers = (player1, player2) ->
   else
     return player2.ms.losses - player1.ms.losses
 
+Array.prototype.popRandom = ->
+  @splice(Math.ceil(Math.random() * (@length - 1)),1)[0];
+
 class Player
   constructor: (@name, @clan, @id) ->
     @points = 0
@@ -109,7 +112,7 @@ class Round
     @matches = {}
 
   addMatch: (player1, player2) ->
-    match = @tournament.addMatch(player1, player2)
+    match = @tournament.addMatch(player1.id, player2.id)
     @matches[match.id] = match
 
 class @SwissTournament
@@ -167,10 +170,23 @@ class @SwissTournament
   getCurrentRound: ->
     @rounds[@rounds.length - 1]
 
-  getRankedPlayers: ->
+  getPlayerList: ->
     playerList = []
     for id, player of @players
       playerList.push(player)
 
+    playerList
+
+  getRankedPlayers: ->
+    playerList = @getPlayerList()
     playerList.forEach((player) -> player.calculateMiliseconds())
     playerList.sort(rankPlayers)
+
+  generateRound: ->
+    @addRound()
+
+    round = @getCurrentRound()
+    playerList = @getPlayerList()
+    while player1 = playerList.popRandom()
+      player2 = playerList.popRandom()
+      round.addMatch(player1, player2)

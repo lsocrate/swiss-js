@@ -180,10 +180,12 @@
   });
 
   test("Add match to round", function() {
-    var round;
+    var anna, bob, round;
+    anna = this.tournament.getPlayer("p1");
+    bob = this.tournament.getPlayer("p2");
     this.tournament.addRound();
     round = this.tournament.getRound(1);
-    round.addMatch("p1", "p2");
+    round.addMatch(anna, bob);
     return ok(round.matches["m_p1@p2"]);
   });
 
@@ -266,6 +268,29 @@
     equal(ranking[7].name, "Dennis", "Dennis ranking");
     equal(ranking[8].name, "Claude", "Claude ranking");
     return equal(ranking[9].name, "Anna", "Anna ranking");
+  });
+
+  module("Round", {
+    setup: function() {
+      this.tournament = new SwissTournament;
+      this.tournament.addPlayer("Anna", "Crab");
+      this.tournament.addPlayer("Bob", "Crane");
+      this.tournament.addPlayer("Claude", "Dragon");
+      this.tournament.addPlayer("Dennis", "Lion");
+      this.tournament.addPlayer("Eliot", "Mantis");
+      this.tournament.addPlayer("Francis", "Phoenix");
+      this.tournament.addPlayer("George", "Scorpion");
+      this.tournament.addPlayer("Henry", "Spider");
+      this.tournament.addPlayer("Irvine", "Unaligned");
+      return this.tournament.addPlayer("Juliet", "Unaligned");
+    }
+  });
+
+  test("Auto generate first round", function() {
+    var round;
+    this.tournament.generateRound();
+    round = this.tournament.getCurrentRound();
+    return equal(Object.keys(round.matches).length, 5);
   });
 
 }).call(this);

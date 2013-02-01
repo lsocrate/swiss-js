@@ -18,6 +18,10 @@
     }
   };
 
+  Array.prototype.popRandom = function() {
+    return this.splice(Math.ceil(Math.random() * (this.length - 1)), 1)[0];
+  };
+
   Player = (function() {
 
     function Player(name, clan, id) {
@@ -190,7 +194,7 @@
 
     Round.prototype.addMatch = function(player1, player2) {
       var match;
-      match = this.tournament.addMatch(player1, player2);
+      match = this.tournament.addMatch(player1.id, player2.id);
       return this.matches[match.id] = match;
     };
 
@@ -270,7 +274,7 @@
       return this.rounds[this.rounds.length - 1];
     };
 
-    SwissTournament.prototype.getRankedPlayers = function() {
+    SwissTournament.prototype.getPlayerList = function() {
       var id, player, playerList, _ref;
       playerList = [];
       _ref = this.players;
@@ -278,10 +282,29 @@
         player = _ref[id];
         playerList.push(player);
       }
+      return playerList;
+    };
+
+    SwissTournament.prototype.getRankedPlayers = function() {
+      var playerList;
+      playerList = this.getPlayerList();
       playerList.forEach(function(player) {
         return player.calculateMiliseconds();
       });
       return playerList.sort(rankPlayers);
+    };
+
+    SwissTournament.prototype.generateRound = function() {
+      var player1, player2, playerList, round, _results;
+      this.addRound();
+      round = this.getCurrentRound();
+      playerList = this.getPlayerList();
+      _results = [];
+      while (player1 = playerList.popRandom()) {
+        player2 = playerList.popRandom();
+        _results.push(round.addMatch(player1, player2));
+      }
+      return _results;
     };
 
     return SwissTournament;

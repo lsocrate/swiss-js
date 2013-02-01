@@ -165,10 +165,13 @@ test("Get round", ->
   ok(@tournament.getRound(1))
 )
 test("Add match to round", ->
+  anna = @tournament.getPlayer("p1")
+  bob = @tournament.getPlayer("p2")
+
   @tournament.addRound()
 
   round = @tournament.getRound(1)
-  round.addMatch("p1", "p2")
+  round.addMatch(anna, bob)
 
   ok(round.matches["m_p1@p2"])
 )
@@ -257,4 +260,25 @@ test("Rank players with ms", ->
   equal(ranking[7].name, "Dennis", "Dennis ranking")
   equal(ranking[8].name, "Claude", "Claude ranking")
   equal(ranking[9].name, "Anna", "Anna ranking")
+);
+
+module("Round", {
+  setup: ->
+    @tournament = new SwissTournament
+    @tournament.addPlayer("Anna", "Crab")
+    @tournament.addPlayer("Bob", "Crane")
+    @tournament.addPlayer("Claude", "Dragon")
+    @tournament.addPlayer("Dennis", "Lion")
+    @tournament.addPlayer("Eliot", "Mantis")
+    @tournament.addPlayer("Francis", "Phoenix")
+    @tournament.addPlayer("George", "Scorpion")
+    @tournament.addPlayer("Henry", "Spider")
+    @tournament.addPlayer("Irvine", "Unaligned")
+    @tournament.addPlayer("Juliet", "Unaligned")
+})
+test("Auto generate first round", ->
+  @tournament.generateRound()
+  round = @tournament.getCurrentRound()
+
+  equal(Object.keys(round.matches).length, 5)
 );
