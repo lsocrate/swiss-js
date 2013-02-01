@@ -3,7 +3,14 @@
   var Match, MatchMatrix, Player, Round, makeMatchName, rankPlayers;
 
   makeMatchName = function(player1, player2) {
-    return "m_" + player1.id + "@" + player2.id;
+    var ids;
+    ids = [player1.id, player2.id];
+    ids.sort(function(a, b) {
+      a = parseInt(a.slice(1), 10);
+      b = parseInt(b.slice(1), 10);
+      return a - b;
+    });
+    return "m_" + ids[0] + "@" + ids[1];
   };
 
   rankPlayers = function(player1, player2) {
@@ -339,15 +346,19 @@
         while (Object.size(matrix.matches) > 0) {
           _ref = Object.popRandom(matrix.matches), matchId = _ref[0], match = _ref[1];
           players = [];
-          _ref1 = match.players;
-          for (playerId in _ref1) {
-            player = _ref1[playerId];
-            players.push(player);
-            matrix.removePlayerMatches(player);
+          if (this.matches[matchId] == null) {
+            _ref1 = match.players;
+            for (playerId in _ref1) {
+              player = _ref1[playerId];
+              players.push(player);
+              matrix.removePlayerMatches(player);
+            }
+            round.addMatch(players[0], players[1]);
+          } else {
+            matrix.matches[matchId] = match;
           }
-          round.addMatch(players[0], players[1]);
         }
-        oddPlayerId = ((_ref2 = Object.keys(matrix.matrix)) != null ? _ref2[0] : void 0) || false;
+        oddPlayerId = ((_ref2 = Object.keys(matrix.matrix)) != null ? _ref2[0] : void 0) || null;
         oddPlayer = this.getPlayer(oddPlayerId);
       }
       return round;

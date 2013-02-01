@@ -13,7 +13,6 @@ generateTournament = ->
 
   tournament
 
-
 module("Player", {
   setup: ->
     @tournament = new SwissTournament
@@ -42,6 +41,16 @@ test("Add match", ->
   ok(@tournament.matches["m_p1@p2"])
   ok(player1.opponents.p2)
   ok(player2.opponents.p1)
+
+
+  @tournament.addMatch("p4", "p3")
+
+  player3 = @tournament.getPlayer("p3")
+  player4 = @tournament.getPlayer("p4")
+
+  ok(@tournament.matches["m_p3@p4"])
+  ok(player3.opponents.p4)
+  ok(player4.opponents.p3)
 )
 test("Get match", ->
   @tournament.addMatch("p1", "p2")
@@ -275,8 +284,9 @@ test("Auto generate further rounds", ->
 
     round2 = tournament.generateRound()
     equal(Object.keys(tournament.matches).length, 10)
+    console.log(tournament.matches) if Object.keys(tournament.matches).length isnt 10
 
-  testingQuantity = 1
+  testingQuantity = 10
   expect(testingQuantity)
   while testingQuantity--
     testRoundGeneration()

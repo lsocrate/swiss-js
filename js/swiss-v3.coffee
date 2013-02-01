@@ -1,5 +1,11 @@
 makeMatchName = (player1, player2) ->
-  "m_" + player1.id + "@" + player2.id
+  ids = [player1.id, player2.id]
+  ids.sort((a,b) ->
+    a = parseInt(a.slice(1), 10)
+    b = parseInt(b.slice(1), 10)
+    a - b
+  )
+  "m_" + ids[0] + "@" + ids[1]
 
 rankPlayers = (player1, player2) ->
   if player2.points isnt player1.points
@@ -213,10 +219,13 @@ class @SwissTournament
       while Object.size(matrix.matches) > 0
         [matchId, match] = Object.popRandom(matrix.matches)
         players = []
-        for playerId, player of match.players
-          players.push(player)
-          matrix.removePlayerMatches(player)
-        round.addMatch(players[0], players[1])
-      oddPlayerId = Object.keys(matrix.matrix)?[0] || false
+        unless @matches[matchId]?
+          for playerId, player of match.players
+            players.push(player)
+            matrix.removePlayerMatches(player)
+          round.addMatch(players[0], players[1])
+        else
+          matrix.matches[matchId] = match
+      oddPlayerId = Object.keys(matrix.matrix)?[0] || null
       oddPlayer = @getPlayer(oddPlayerId)
     round

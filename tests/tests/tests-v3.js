@@ -44,13 +44,19 @@
   });
 
   test("Add match", function() {
-    var player1, player2;
+    var player1, player2, player3, player4;
     this.tournament.addMatch("p1", "p2");
     player1 = this.tournament.getPlayer("p1");
     player2 = this.tournament.getPlayer("p2");
     ok(this.tournament.matches["m_p1@p2"]);
     ok(player1.opponents.p2);
-    return ok(player2.opponents.p1);
+    ok(player2.opponents.p1);
+    this.tournament.addMatch("p4", "p3");
+    player3 = this.tournament.getPlayer("p3");
+    player4 = this.tournament.getPlayer("p4");
+    ok(this.tournament.matches["m_p3@p4"]);
+    ok(player3.opponents.p4);
+    return ok(player4.opponents.p3);
   });
 
   test("Get match", function() {
@@ -286,9 +292,12 @@
       round1.addMatch(george, henry).reportWinner(henry);
       round1.addMatch(irvine, juliet).reportWinner(juliet);
       round2 = tournament.generateRound();
-      return equal(Object.keys(tournament.matches).length, 10);
+      equal(Object.keys(tournament.matches).length, 10);
+      if (Object.keys(tournament.matches).length !== 10) {
+        return console.log(tournament.matches);
+      }
     };
-    testingQuantity = 1;
+    testingQuantity = 10;
     expect(testingQuantity);
     _results = [];
     while (testingQuantity--) {
