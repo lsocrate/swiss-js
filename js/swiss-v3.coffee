@@ -1,6 +1,16 @@
 makeMatchName = (player1, player2) ->
   "m_" + player1.id + "@" + player2.id
 
+rankPlayers = (player1, player2) ->
+  if player2.points isnt player1.points
+    return player2.points - player1.points
+  else if player2.ms.total isnt player1.ms.total
+    return player2.ms.total - player1.ms.total
+  else if player2.ms.victories isnt player1.ms.victories
+    return player2.ms.victories - player1.ms.victories
+  else
+    return player2.ms.losses - player1.ms.losses
+
 class Player
   constructor: (@name, @clan, @id) ->
     @points = 0
@@ -162,16 +172,5 @@ class @SwissTournament
     for id, player of @players
       playerList.push(player)
 
-    playerList.forEach((player) ->
-      player.calculateMiliseconds()
-    )
-    playerList.sort((a, b) ->
-      if b.points isnt a.points
-        return b.points - a.points
-      else if b.ms.total isnt a.ms.total
-        return b.ms.total - a.ms.total
-      else if b.ms.victories isnt a.ms.victories
-        return b.ms.victories - a.ms.victories
-      else
-        return b.ms.losses - a.ms.losses
-    )
+    playerList.forEach((player) -> player.calculateMiliseconds())
+    playerList.sort(rankPlayers)
