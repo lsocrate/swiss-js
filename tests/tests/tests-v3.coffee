@@ -1,3 +1,19 @@
+generateTournament = ->
+  tournament = new SwissTournament
+  tournament.addPlayer("Anna", "Crab")
+  tournament.addPlayer("Bob", "Crane")
+  tournament.addPlayer("Claude", "Dragon")
+  tournament.addPlayer("Dennis", "Lion")
+  tournament.addPlayer("Eliot", "Mantis")
+  tournament.addPlayer("Francis", "Phoenix")
+  tournament.addPlayer("George", "Scorpion")
+  tournament.addPlayer("Henry", "Spider")
+  tournament.addPlayer("Irvine", "Unaligned")
+  tournament.addPlayer("Juliet", "Unaligned")
+
+  tournament
+
+
 module("Player", {
   setup: ->
     @tournament = new SwissTournament
@@ -15,17 +31,7 @@ test("Get player", ->
 
 module("Matches", {
   setup: ->
-    @tournament = new SwissTournament
-    @tournament.addPlayer("Anna", "Crab")
-    @tournament.addPlayer("Bob", "Crane")
-    @tournament.addPlayer("Claude", "Dragon")
-    @tournament.addPlayer("Dennis", "Lion")
-    @tournament.addPlayer("Eliot", "Mantis")
-    @tournament.addPlayer("Francis", "Phoenix")
-    @tournament.addPlayer("George", "Scorpion")
-    @tournament.addPlayer("Henry", "Spider")
-    @tournament.addPlayer("Irvine", "Unaligned")
-    @tournament.addPlayer("Juliet", "Unaligned")
+    @tournament = generateTournament()
 })
 test("Add match", ->
   @tournament.addMatch("p1", "p2")
@@ -81,17 +87,7 @@ test("Report double loss", ->
 
 module("Match Matrix", {
   setup: ->
-    @tournament = new SwissTournament
-    @tournament.addPlayer("Anna", "Crab")
-    @tournament.addPlayer("Bob", "Crane")
-    @tournament.addPlayer("Claude", "Dragon")
-    @tournament.addPlayer("Dennis", "Lion")
-    @tournament.addPlayer("Eliot", "Mantis")
-    @tournament.addPlayer("Francis", "Phoenix")
-    @tournament.addPlayer("George", "Scorpion")
-    @tournament.addPlayer("Henry", "Spider")
-    @tournament.addPlayer("Irvine", "Unaligned")
-    @tournament.addPlayer("Juliet", "Unaligned")
+    @tournament = generateTournament()
 
     @players = [
       @tournament.getPlayer("p1")
@@ -142,19 +138,93 @@ test("Remove player matches", ->
   equal(Object.keys(matrix.matrix["p4"]).length, 3)
 )
 
+module("Ranking", {
+  setup: ->
+    @tournament = generateTournament()
+
+    @anna = @tournament.getPlayer("p1")
+    @bob = @tournament.getPlayer("p2")
+    @claude = @tournament.getPlayer("p3")
+    @dennis = @tournament.getPlayer("p4")
+    @eliot = @tournament.getPlayer("p5")
+    @francis = @tournament.getPlayer("p6")
+    @george = @tournament.getPlayer("p7")
+    @henry = @tournament.getPlayer("p8")
+    @irvine = @tournament.getPlayer("p9")
+    @juliet = @tournament.getPlayer("p10")
+
+    @tournament.addMatch(@dennis.id, @juliet.id).reportWinner(@juliet)
+    @tournament.addMatch(@francis.id, @irvine.id).reportWinner(@irvine)
+    @tournament.addMatch(@bob.id, @henry.id).reportWinner(@henry)
+    @tournament.addMatch(@anna.id, @claude.id).reportWinner(@claude)
+    @tournament.addMatch(@eliot.id, @george.id).reportWinner(@george)
+
+    @tournament.addMatch(@irvine.id, @juliet.id).reportWinner(@juliet)
+    @tournament.addMatch(@henry.id, @george.id).reportWinner(@henry)
+    @tournament.addMatch(@dennis.id, @claude.id).reportWinner(@dennis)
+    @tournament.addMatch(@bob.id, @francis.id).reportWinner(@francis)
+    @tournament.addMatch(@anna.id, @eliot.id).reportWinner(@eliot)
+
+    @tournament.addMatch(@henry.id, @juliet.id).reportWinner(@juliet)
+    @tournament.addMatch(@george.id, @irvine.id).reportWinner(@irvine)
+    @tournament.addMatch(@claude.id, @francis.id).reportWinner(@francis)
+    @tournament.addMatch(@dennis.id, @eliot.id).reportWinner(@eliot)
+    @tournament.addMatch(@anna.id, @bob.id).reportWinner(@bob)
+
+    @tournament.addMatch(@francis.id, @juliet.id).reportWinner(@juliet)
+    @tournament.addMatch(@eliot.id, @irvine.id).reportWinner(@irvine)
+    @tournament.addMatch(@claude.id, @henry.id).reportWinner(@henry)
+    @tournament.addMatch(@dennis.id, @george.id).reportWinner(@george)
+    @tournament.addMatch(@anna.id, @bob.id).reportWinner(@bob)
+})
+test("Rank players with ms", ->
+  ranking = @tournament.getRankedPlayers()
+
+  equal(@juliet.points, 4, "juliet points")
+  equal(@irvine.points, 3, "irvine points")
+  equal(@henry.points, 3, "henry points")
+  equal(@george.points, 2, "george points")
+  equal(@francis.points, 2, "francis points")
+  equal(@eliot.points, 2, "eliot points")
+  equal(@bob.points, 2, "bob points")
+  equal(@claude.points, 1, "claude points")
+  equal(@dennis.points, 1, "dennis points")
+  equal(@anna.points, 0, "anna points")
+
+  equal(@juliet.ms.total, 9, "juliet ms total")
+  equal(@irvine.ms.total, 10, "irvine ms total")
+  equal(@henry.ms.total, 9, "henry ms total")
+  equal(@francis.ms.total, 10, "francis ms total")
+  equal(@george.ms.total, 9, "george ms total")
+  equal(@eliot.ms.total, 6, "eliot ms total")
+  equal(@bob.ms.total, 5, "bob ms total")
+  equal(@dennis.ms.total, 9, "dennis ms total")
+  equal(@claude.ms.total, 6, "claude ms total")
+  equal(@anna.ms.total, 5, "anna ms total")
+
+  equal(ranking[0].name, "Juliet", "Juliet ranking")
+  equal(ranking[1].name, "Irvine", "Irvine ranking")
+  equal(ranking[2].name, "Henry", "Henry ranking")
+  equal(ranking[3].name, "Francis", "Francis ranking")
+  equal(ranking[4].name, "George", "George ranking")
+  equal(ranking[5].name, "Eliot", "Eliot ranking")
+  equal(ranking[6].name, "Bob", "Bob ranking")
+  equal(ranking[7].name, "Dennis", "Dennis ranking")
+  equal(ranking[8].name, "Claude", "Claude ranking")
+  equal(ranking[9].name, "Anna", "Anna ranking")
+)
+test("Get players grouped by points", ->
+  playersGrouped = @tournament.getPlayerListGroupedByPoints()
+  equal(playersGrouped[0].length, 1)
+  equal(playersGrouped[1].length, 2)
+  equal(playersGrouped[2].length, 4)
+  equal(playersGrouped[3].length, 2)
+  equal(playersGrouped[4].length, 1)
+)
+
 module("Round", {
   setup: ->
-    @tournament = new SwissTournament
-    @tournament.addPlayer("Anna", "Crab")
-    @tournament.addPlayer("Bob", "Crane")
-    @tournament.addPlayer("Claude", "Dragon")
-    @tournament.addPlayer("Dennis", "Lion")
-    @tournament.addPlayer("Eliot", "Mantis")
-    @tournament.addPlayer("Francis", "Phoenix")
-    @tournament.addPlayer("George", "Scorpion")
-    @tournament.addPlayer("Henry", "Spider")
-    @tournament.addPlayer("Irvine", "Unaligned")
-    @tournament.addPlayer("Juliet", "Unaligned")
+    @tournament = generateTournament()
 })
 test("Add round", ->
   @tournament.addRound()
@@ -175,110 +245,39 @@ test("Add match to round", ->
 
   ok(round.matches["m_p1@p2"])
 )
-
-module("Ranking", {
-  setup: ->
-    @tournament = new SwissTournament
-    @tournament.addPlayer("Anna", "Crab")
-    @tournament.addPlayer("Bob", "Crane")
-    @tournament.addPlayer("Claude", "Dragon")
-    @tournament.addPlayer("Dennis", "Lion")
-    @tournament.addPlayer("Eliot", "Mantis")
-    @tournament.addPlayer("Francis", "Phoenix")
-    @tournament.addPlayer("George", "Scorpion")
-    @tournament.addPlayer("Henry", "Spider")
-    @tournament.addPlayer("Irvine", "Unaligned")
-    @tournament.addPlayer("Juliet", "Unaligned")
-})
-test("Rank players with ms", ->
-  anna = @tournament.getPlayer("p1")
-  bob = @tournament.getPlayer("p2")
-  claude = @tournament.getPlayer("p3")
-  dennis = @tournament.getPlayer("p4")
-  eliot = @tournament.getPlayer("p5")
-  francis = @tournament.getPlayer("p6")
-  george = @tournament.getPlayer("p7")
-  henry = @tournament.getPlayer("p8")
-  irvine = @tournament.getPlayer("p9")
-  juliet = @tournament.getPlayer("p10")
-
-  @tournament.addMatch(dennis.id, juliet.id).reportWinner(juliet)
-  @tournament.addMatch(francis.id, irvine.id).reportWinner(irvine)
-  @tournament.addMatch(bob.id, henry.id).reportWinner(henry)
-  @tournament.addMatch(anna.id, claude.id).reportWinner(claude)
-  @tournament.addMatch(eliot.id, george.id).reportWinner(george)
-
-  @tournament.addMatch(irvine.id, juliet.id).reportWinner(juliet)
-  @tournament.addMatch(henry.id, george.id).reportWinner(henry)
-  @tournament.addMatch(dennis.id, claude.id).reportWinner(dennis)
-  @tournament.addMatch(bob.id, francis.id).reportWinner(francis)
-  @tournament.addMatch(anna.id, eliot.id).reportWinner(eliot)
-
-  @tournament.addMatch(henry.id, juliet.id).reportWinner(juliet)
-  @tournament.addMatch(george.id, irvine.id).reportWinner(irvine)
-  @tournament.addMatch(claude.id, francis.id).reportWinner(francis)
-  @tournament.addMatch(dennis.id, eliot.id).reportWinner(eliot)
-  @tournament.addMatch(anna.id, bob.id).reportWinner(bob)
-
-  @tournament.addMatch(francis.id, juliet.id).reportWinner(juliet)
-  @tournament.addMatch(eliot.id, irvine.id).reportWinner(irvine)
-  @tournament.addMatch(claude.id, henry.id).reportWinner(henry)
-  @tournament.addMatch(dennis.id, george.id).reportWinner(george)
-  @tournament.addMatch(anna.id, bob.id).reportWinner(bob)
-
-  ranking = @tournament.getRankedPlayers()
-
-  equal(juliet.points, 4, "juliet points")
-  equal(irvine.points, 3, "irvine points")
-  equal(henry.points, 3, "henry points")
-  equal(george.points, 2, "george points")
-  equal(francis.points, 2, "francis points")
-  equal(eliot.points, 2, "eliot points")
-  equal(bob.points, 2, "bob points")
-  equal(claude.points, 1, "claude points")
-  equal(dennis.points, 1, "dennis points")
-  equal(anna.points, 0, "anna points")
-
-  equal(juliet.ms.total, 9, "juliet ms total")
-  equal(irvine.ms.total, 10, "irvine ms total")
-  equal(henry.ms.total, 9, "henry ms total")
-  equal(francis.ms.total, 10, "francis ms total")
-  equal(george.ms.total, 9, "george ms total")
-  equal(eliot.ms.total, 6, "eliot ms total")
-  equal(bob.ms.total, 5, "bob ms total")
-  equal(dennis.ms.total, 9, "dennis ms total")
-  equal(claude.ms.total, 6, "claude ms total")
-  equal(anna.ms.total, 5, "anna ms total")
-
-  equal(ranking[0].name, "Juliet", "Juliet ranking")
-  equal(ranking[1].name, "Irvine", "Irvine ranking")
-  equal(ranking[2].name, "Henry", "Henry ranking")
-  equal(ranking[3].name, "Francis", "Francis ranking")
-  equal(ranking[4].name, "George", "George ranking")
-  equal(ranking[5].name, "Eliot", "Eliot ranking")
-  equal(ranking[6].name, "Bob", "Bob ranking")
-  equal(ranking[7].name, "Dennis", "Dennis ranking")
-  equal(ranking[8].name, "Claude", "Claude ranking")
-  equal(ranking[9].name, "Anna", "Anna ranking")
-);
-
-module("Round", {
-  setup: ->
-    @tournament = new SwissTournament
-    @tournament.addPlayer("Anna", "Crab")
-    @tournament.addPlayer("Bob", "Crane")
-    @tournament.addPlayer("Claude", "Dragon")
-    @tournament.addPlayer("Dennis", "Lion")
-    @tournament.addPlayer("Eliot", "Mantis")
-    @tournament.addPlayer("Francis", "Phoenix")
-    @tournament.addPlayer("George", "Scorpion")
-    @tournament.addPlayer("Henry", "Spider")
-    @tournament.addPlayer("Irvine", "Unaligned")
-    @tournament.addPlayer("Juliet", "Unaligned")
-})
 test("Auto generate first round", ->
   @tournament.generateRound()
   round = @tournament.getCurrentRound()
 
   equal(Object.keys(round.matches).length, 5)
+);
+test("Auto generate further rounds", ->
+  testRoundGeneration = ->
+    tournament = generateTournament()
+
+    anna = tournament.getPlayer("p1")
+    bob = tournament.getPlayer("p2")
+    claude = tournament.getPlayer("p3")
+    dennis = tournament.getPlayer("p4")
+    eliot = tournament.getPlayer("p5")
+    francis = tournament.getPlayer("p6")
+    george = tournament.getPlayer("p7")
+    henry = tournament.getPlayer("p8")
+    irvine = tournament.getPlayer("p9")
+    juliet = tournament.getPlayer("p10")
+
+    round1 = tournament.addRound()
+    round1.addMatch(anna, bob).reportWinner(bob)
+    round1.addMatch(claude, dennis).reportWinner(dennis)
+    round1.addMatch(eliot, francis).reportWinner(francis)
+    round1.addMatch(george, henry).reportWinner(henry)
+    round1.addMatch(irvine, juliet).reportWinner(juliet)
+
+    round2 = tournament.generateRound()
+    equal(Object.keys(tournament.matches).length, 10)
+
+  testingQuantity = 1
+  expect(testingQuantity)
+  while testingQuantity--
+    testRoundGeneration()
 );

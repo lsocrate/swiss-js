@@ -22,6 +22,18 @@
     return this.splice(Math.ceil(Math.random() * (this.length - 1)), 1)[0];
   };
 
+  Object.popRandom = function(object) {
+    var key, value;
+    key = Object.keys(object).popRandom();
+    value = object[key];
+    delete object[key];
+    return [key, value];
+  };
+
+  Object.size = function(object) {
+    return Object.keys(object).length;
+  };
+
   Player = (function() {
 
     function Player(name, clan, id) {
@@ -263,7 +275,10 @@
     };
 
     SwissTournament.prototype.addRound = function() {
-      return this.rounds.push(new Round(this));
+      var round;
+      round = new Round(this);
+      this.rounds.push(round);
+      return round;
     };
 
     SwissTournament.prototype.getRound = function(round) {
@@ -285,6 +300,20 @@
       return playerList;
     };
 
+    SwissTournament.prototype.getPlayerListGroupedByPoints = function() {
+      var id, player, playerList, _ref;
+      playerList = [];
+      _ref = this.players;
+      for (id in _ref) {
+        player = _ref[id];
+        if (playerList[player.points] == null) {
+          playerList[player.points] = [];
+        }
+        playerList[player.points].push(player);
+      }
+      return playerList;
+    };
+
     SwissTournament.prototype.getRankedPlayers = function() {
       var playerList;
       playerList = this.getPlayerList();
@@ -295,16 +324,33 @@
     };
 
     SwissTournament.prototype.generateRound = function() {
-      var player1, player2, playerList, round, _results;
+      var group, match, matchId, matrix, oddPlayer, oddPlayerId, player, playerGroups, playerId, players, round, _i, _len, _ref, _ref1, _ref2;
       this.addRound();
       round = this.getCurrentRound();
-      playerList = this.getPlayerList();
-      _results = [];
-      while (player1 = playerList.popRandom()) {
-        player2 = playerList.popRandom();
-        _results.push(round.addMatch(player1, player2));
+      playerGroups = this.getPlayerListGroupedByPoints().reverse();
+      oddPlayer;
+
+      for (_i = 0, _len = playerGroups.length; _i < _len; _i++) {
+        group = playerGroups[_i];
+        if (typeof oddPlayer !== "undefined" && oddPlayer !== null) {
+          group.push(oddPlayer);
+        }
+        matrix = this.getMatchMatrixForPlayers(group);
+        while (Object.size(matrix.matches) > 0) {
+          _ref = Object.popRandom(matrix.matches), matchId = _ref[0], match = _ref[1];
+          players = [];
+          _ref1 = match.players;
+          for (playerId in _ref1) {
+            player = _ref1[playerId];
+            players.push(player);
+            matrix.removePlayerMatches(player);
+          }
+          round.addMatch(players[0], players[1]);
+        }
+        oddPlayerId = ((_ref2 = Object.keys(matrix.matrix)) != null ? _ref2[0] : void 0) || false;
+        oddPlayer = this.getPlayer(oddPlayerId);
       }
-      return _results;
+      return round;
     };
 
     return SwissTournament;

@@ -14,6 +14,15 @@ rankPlayers = (player1, player2) ->
 Array.prototype.popRandom = ->
   @splice(Math.ceil(Math.random() * (@length - 1)),1)[0];
 
+Object.popRandom = (object) ->
+  key = Object.keys(object).popRandom()
+  value = object[key]
+  delete object[key]
+  [key, value]
+
+Object.size = (object) ->
+  Object.keys(object).length
+
 class Player
   constructor: (@name, @clan, @id) ->
     @points = 0
@@ -162,7 +171,9 @@ class @SwissTournament
     new MatchMatrix(players, @)
 
   addRound: ->
-    @rounds.push(new Round(@))
+    round = new Round(@)
+    @rounds.push(round)
+    round
 
   getRound: (round) ->
     @rounds[--round]
@@ -177,6 +188,14 @@ class @SwissTournament
 
     playerList
 
+  getPlayerListGroupedByPoints: ->
+    playerList = []
+    for id, player of @players
+      playerList[player.points] = [] unless playerList[player.points]?
+      playerList[player.points].push(player)
+
+    playerList
+
   getRankedPlayers: ->
     playerList = @getPlayerList()
     playerList.forEach((player) -> player.calculateMiliseconds())
@@ -186,7 +205,18 @@ class @SwissTournament
     @addRound()
 
     round = @getCurrentRound()
-    playerList = @getPlayerList()
-    while player1 = playerList.popRandom()
-      player2 = playerList.popRandom()
-      round.addMatch(player1, player2)
+    playerGroups = @getPlayerListGroupedByPoints().reverse()
+    oddPlayer
+    for group in playerGroups
+      group.push(oddPlayer) if oddPlayer?
+      matrix = @getMatchMatrixForPlayers(group)
+      while Object.size(matrix.matches) > 0
+        [matchId, match] = Object.popRandom(matrix.matches)
+        players = []
+        for playerId, player of match.players
+          players.push(player)
+          matrix.removePlayerMatches(player)
+        round.addMatch(players[0], players[1])
+      oddPlayerId = Object.keys(matrix.matrix)?[0] || false
+      oddPlayer = @getPlayer(oddPlayerId)
+    round
